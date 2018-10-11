@@ -13,6 +13,8 @@
 		20D514E02162C0DB00528E6C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D514DF2162C0DB00528E6C /* main.m */; };
 		20D514EB2162C0DC00528E6C /* EcuationDrawerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D514EA2162C0DC00528E6C /* EcuationDrawerTests.m */; };
 		20D514F62162C0DC00528E6C /* EcuationDrawerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D514F52162C0DC00528E6C /* EcuationDrawerUITests.m */; };
+		20D515412163861900528E6C /* Chart.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D515402163861900528E6C /* Chart.m */; };
+		20D51544216FD0B800528E6C /* Ecuation.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D51543216FD0B800528E6C /* Ecuation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,10 @@
 		20D514F12162C0DC00528E6C /* EcuationDrawerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EcuationDrawerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		20D514F52162C0DC00528E6C /* EcuationDrawerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EcuationDrawerUITests.m; sourceTree = "<group>"; };
 		20D514F72162C0DC00528E6C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		20D5153F2163861900528E6C /* Chart.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Chart.h; sourceTree = "<group>"; };
+		20D515402163861900528E6C /* Chart.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Chart.m; sourceTree = "<group>"; };
+		20D51542216FD0B800528E6C /* Ecuation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ecuation.h; sourceTree = "<group>"; };
+		20D51543216FD0B800528E6C /* Ecuation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Ecuation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +110,10 @@
 				20D514DE2162C0DB00528E6C /* Info.plist */,
 				20D514DF2162C0DB00528E6C /* main.m */,
 				20D514E12162C0DB00528E6C /* EcuationDrawer.entitlements */,
+				20D515402163861900528E6C /* Chart.m */,
+				20D5153F2163861900528E6C /* Chart.h */,
+				20D51542216FD0B800528E6C /* Ecuation.h */,
+				20D51543216FD0B800528E6C /* Ecuation.m */,
 			);
 			path = EcuationDrawer;
 			sourceTree = "<group>";
@@ -255,6 +265,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20D515412163861900528E6C /* Chart.m in Sources */,
+				20D51544216FD0B800528E6C /* Ecuation.m in Sources */,
 				20D514E02162C0DB00528E6C /* main.m in Sources */,
 				20D514D82162C0D200528E6C /* AppDelegate.m in Sources */,
 			);
