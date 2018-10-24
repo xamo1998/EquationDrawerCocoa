@@ -15,4 +15,5 @@
 @property int termCount;
 -(id)initWithName:(NSString *)name
    withCountTerms:(int)count;
+-(NSString *)getCustomizedName: (NSMutableArray *) terms;
 @end
