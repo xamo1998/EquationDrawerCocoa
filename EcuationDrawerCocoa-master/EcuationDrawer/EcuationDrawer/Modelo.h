@@ -7,11 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "EcuationData.h"
 @interface Modelo : NSObject{
     
 }
-@property NSMutableArray *ecuationTitles;
+@property NSMutableArray *ecuationData;
 @property NSMutableArray *ecuations;
 -(void)createTitleOfEcuations;
 

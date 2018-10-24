@@ -10,14 +10,14 @@
 
 @interface Ecuation : NSObject{
     
-    float *terms;
-    int termCount;
     
     NSBezierPath *bezierPath;
 }
 @property NSColor *color;
 @property NSString *name;
 @property NSString *ecuation;
+@property int termCount;
+@property float *terms;
 -(float) valueAt:(float)x;
 -(void) drawInRect: (NSRect) bounds
 withGraphicsContext:(NSGraphicsContext *)context;

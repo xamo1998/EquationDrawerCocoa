@@ -15,12 +15,12 @@
                                                   NSComboBoxDelegate,
                                                   NSTableViewDataSource,
                                                   NSTableViewDelegate>{
-    
+    NSMutableArray *termValues;
     IBOutlet NSComboBox *ecuationComboBox;
-    IBOutlet NSTextField *paramATextField,*paramBTextField,*nameTextField;
+    IBOutlet NSTextField *nameTextField;
     IBOutlet NSButton *addGraphicButton,*removeGraphicButton;
     IBOutlet NSColorWell *colorWell;
-    IBOutlet NSTableView *ecuationTableView;
+    IBOutlet NSTableView *ecuationTableView,*paramsTableView;
                                                       
 }
 @property Modelo *modelo;

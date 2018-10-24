@@ -9,26 +9,29 @@
 #import "Modelo.h"
 
 @implementation Modelo
-@synthesize ecuationTitles;
+@class EcuationData;
+@synthesize ecuationData;
 @synthesize ecuations;
 -(id)init{
     self=[super init];
     if(!self){
         
     }
-    ecuationTitles=[[NSMutableArray alloc]init];
+    ecuationData=[[NSMutableArray alloc]init];
     ecuations=[[NSMutableArray alloc]init];
     [self createTitleOfEcuations];
     return self;
 }
 
 -(void)createTitleOfEcuations{
-    [ecuationTitles addObject:@"a * sen(b*x)"];
-    [ecuationTitles addObject:@"a * cos(b*x)"];
-    [ecuationTitles addObject:@"a * x^n"];
-    [ecuationTitles addObject:@"a * x + b"];
-    [ecuationTitles addObject:@"a * x^2 + b*x + c"];
-    [ecuationTitles addObject:@"a / (b*x)"];
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * sen(b*x)" withCountTerms:2]];
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * cos(b*x)" withCountTerms:2]];
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * x^n" withCountTerms:1]];
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * x + b" withCountTerms:2]];
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * x^2 + b*x + c" withCountTerms:3]];
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a / (b*x)" withCountTerms:2]];
+    NSLog(@"En la pos %i, hay %i terms", 0, [[[self ecuationData]objectAtIndex:0]termCount]);
+
 }
 
 @end

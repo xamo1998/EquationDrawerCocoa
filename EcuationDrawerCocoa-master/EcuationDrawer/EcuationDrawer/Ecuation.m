@@ -9,12 +9,14 @@
 #import "Ecuation.h"
 
 @implementation Ecuation
-- (id)init{
+@synthesize termCount;
+@synthesize terms;
+- (id)initWithParams:(int)numberOfParams{
     self=[super init];
     if(!self){
         
     }
-    termCount=2;
+    termCount=numberOfParams;
     terms=malloc(termCount*sizeof(float));
 
     return self;
