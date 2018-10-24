@@ -6,12 +6,19 @@
 //  Copyright © 2018 xamo. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface Ecuation : NSObject
-
+@interface Ecuation : NSObject{
+    
+    
+    NSBezierPath *bezierPath;
+}
+@property NSColor *color;
+@property NSString *name;
+@property NSString *ecuation;
+@property int termCount;
+@property float *terms;
+-(float) valueAt:(float)x;
+-(void) drawInRect: (NSRect) bounds
+withGraphicsContext:(NSGraphicsContext *)context;
 @end
-
-NS_ASSUME_NONNULL_END

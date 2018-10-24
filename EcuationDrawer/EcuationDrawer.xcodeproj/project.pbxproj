@@ -15,6 +15,11 @@
 		20D514F62162C0DC00528E6C /* EcuationDrawerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D514F52162C0DC00528E6C /* EcuationDrawerUITests.m */; };
 		20D515412163861900528E6C /* Chart.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D515402163861900528E6C /* Chart.m */; };
 		20D51544216FD0B800528E6C /* Ecuation.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D51543216FD0B800528E6C /* Ecuation.m */; };
+		FBE35E7C2180BC3400E76095 /* EcuationData.m in Sources */ = {isa = PBXBuildFile; fileRef = FBE35E7B2180BC3400E76095 /* EcuationData.m */; };
+		FBFC5899217F6A9E005539E0 /* GraphicsController.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFC5898217F6A9E005539E0 /* GraphicsController.m */; };
+		FBFC589F217F6BD6005539E0 /* PreferencesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFC589D217F6BD6005539E0 /* PreferencesWindow.m */; };
+		FBFC58A0217F6BD6005539E0 /* PreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = FBFC589E217F6BD6005539E0 /* PreferencesWindow.xib */; };
+		FBFC58A3217F6EEF005539E0 /* Modelo.m in Sources */ = {isa = PBXBuildFile; fileRef = FBFC58A2217F6EEF005539E0 /* Modelo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +58,15 @@
 		20D515402163861900528E6C /* Chart.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Chart.m; sourceTree = "<group>"; };
 		20D51542216FD0B800528E6C /* Ecuation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ecuation.h; sourceTree = "<group>"; };
 		20D51543216FD0B800528E6C /* Ecuation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Ecuation.m; sourceTree = "<group>"; };
+		FBE35E7A2180BC3400E76095 /* EcuationData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EcuationData.h; sourceTree = "<group>"; };
+		FBE35E7B2180BC3400E76095 /* EcuationData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EcuationData.m; sourceTree = "<group>"; };
+		FBFC5897217F6A9E005539E0 /* GraphicsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsController.h; sourceTree = "<group>"; };
+		FBFC5898217F6A9E005539E0 /* GraphicsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GraphicsController.m; sourceTree = "<group>"; };
+		FBFC589C217F6BD6005539E0 /* PreferencesWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreferencesWindow.h; sourceTree = "<group>"; };
+		FBFC589D217F6BD6005539E0 /* PreferencesWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferencesWindow.m; sourceTree = "<group>"; };
+		FBFC589E217F6BD6005539E0 /* PreferencesWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreferencesWindow.xib; sourceTree = "<group>"; };
+		FBFC58A1217F6EEF005539E0 /* Modelo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Modelo.h; sourceTree = "<group>"; };
+		FBFC58A2217F6EEF005539E0 /* Modelo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Modelo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +128,15 @@
 				20D5153F2163861900528E6C /* Chart.h */,
 				20D51542216FD0B800528E6C /* Ecuation.h */,
 				20D51543216FD0B800528E6C /* Ecuation.m */,
+				FBFC5897217F6A9E005539E0 /* GraphicsController.h */,
+				FBFC5898217F6A9E005539E0 /* GraphicsController.m */,
+				FBFC589C217F6BD6005539E0 /* PreferencesWindow.h */,
+				FBFC589D217F6BD6005539E0 /* PreferencesWindow.m */,
+				FBFC589E217F6BD6005539E0 /* PreferencesWindow.xib */,
+				FBFC58A1217F6EEF005539E0 /* Modelo.h */,
+				FBFC58A2217F6EEF005539E0 /* Modelo.m */,
+				FBE35E7A2180BC3400E76095 /* EcuationData.h */,
+				FBE35E7B2180BC3400E76095 /* EcuationData.m */,
 			);
 			path = EcuationDrawer;
 			sourceTree = "<group>";
@@ -240,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				20D514DA2162C0DB00528E6C /* Assets.xcassets in Resources */,
+				FBFC58A0217F6BD6005539E0 /* PreferencesWindow.xib in Resources */,
 				20D514DD2162C0DB00528E6C /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -267,8 +291,12 @@
 			files = (
 				20D515412163861900528E6C /* Chart.m in Sources */,
 				20D51544216FD0B800528E6C /* Ecuation.m in Sources */,
+				FBFC589F217F6BD6005539E0 /* PreferencesWindow.m in Sources */,
+				FBE35E7C2180BC3400E76095 /* EcuationData.m in Sources */,
 				20D514E02162C0DB00528E6C /* main.m in Sources */,
+				FBFC5899217F6A9E005539E0 /* GraphicsController.m in Sources */,
 				20D514D82162C0D200528E6C /* AppDelegate.m in Sources */,
+				FBFC58A3217F6EEF005539E0 /* Modelo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
