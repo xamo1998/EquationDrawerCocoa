@@ -46,14 +46,18 @@
 -(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView{
     return[[modelo ecuations]count];
 }
+
+-(void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
+    if([[tableView tableColumns]indexOfObject:tableColumn]==2){
+        [cell setBackgroundColor:[[[modelo ecuations]objectAtIndex:row]color]];
+    }
+    [cell setDrawsBackground:YES];
+}
 -(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
-    NSLog(@"Column: %d  Row: %d\n",tableColumn,row);
-    if([[tableView tableColumns]indexOfObject:tableColumn]==1)//Name
+    if([[tableView tableColumns]indexOfObject:tableColumn]==0)//Name
         return [[[modelo ecuations]objectAtIndex:row]name];
-    else if([[tableView tableColumns]indexOfObject:tableColumn]==2)
+    else if([[tableView tableColumns]indexOfObject:tableColumn]==1)
         return [[[modelo ecuations]objectAtIndex:row]ecuation];
-    else if([[tableView tableColumns]indexOfObject:tableColumn]==3)
-        return [[[modelo ecuations]objectAtIndex:row]color];
     return NULL;
 }
 
