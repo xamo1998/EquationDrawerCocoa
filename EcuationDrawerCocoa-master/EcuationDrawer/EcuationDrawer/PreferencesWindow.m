@@ -54,11 +54,9 @@
 
 -(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView{
     if(tableView==paramsTableView){
-        NSInteger terms=[ecuationComboBox indexOfSelectedItem];
-        if(terms>=0){
-            NSLog(@"En la pos %i, hay %i terms", terms, [[[modelo ecuationData]objectAtIndex:terms]termCount]);
-
-            return[[[modelo ecuationData]objectAtIndex:terms]termCount];
+        NSInteger index=[ecuationComboBox indexOfSelectedItem];
+        if(index>=0){
+            return[[[modelo ecuationData]objectAtIndex:index]termCount];
         }
     }
     if(tableView==ecuationTableView)return[[modelo ecuations]count];
@@ -75,29 +73,33 @@
     
 }
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
-    [termValues addObject:[NSString stringWithFormat:@"%d",[object integerValue]]];
+    NSInteger index = [ecuationComboBox indexOfSelectedItem];
+    EcuationData *data=[[modelo ecuationData]objectAtIndex:index];//Recogemos los datos del combo box seleccionado
+    NSString *termName=[[data terms]objectAtIndex:row]; //Recogemos el nombre del termino
+    float termValue=[object floatValue]; // recogemos el valor que quiere dar el usuario
+    NSDictionary *dictionary = @{termName : [NSNumber numberWithFloat:termValue]}; //Diccionario tipo: 'A';23
+    
+    [termValues addObject:dictionary];
     [paramsTableView reloadData];
     [self checkCorrectGraphic];
 }
 -(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
     if(tableView==paramsTableView){
-        if([[paramsTableView tableColumns]indexOfObject:tableColumn]==1)
-            if([termValues count]<=row)
+        if([[paramsTableView tableColumns]indexOfObject:tableColumn]==1) //Si es la columna de los parametros
+            if([termValues count]<=row) //Puede estar vacio...
                 return @"";
-            else
-                return [termValues objectAtIndex:row];
-        if([ecuationComboBox indexOfSelectedItem]>=0){
-            switch (row) {
-                case 0:
-                    return@"a";
-                case 1:
-                    return @"b";
-                case 2:
-                    return @"c";
-                default:
-                    break;
+            else{//Devolvemos el valor del parametro que toque
+                NSInteger index = [ecuationComboBox indexOfSelectedItem];
+                EcuationData *data=[[modelo ecuationData]objectAtIndex:index]; //Recogemos el Data
+                NSString *termName=[[data terms]objectAtIndex:row]; //Recogemos el term que ha modificado
+                return [termValues valueForKey:termName]; //Devolvemos el value de key=termName.
             }
-        }
+        //Param Name values
+        
+        NSInteger index = [ecuationComboBox indexOfSelectedItem];
+        EcuationData *data=[[modelo ecuationData]objectAtIndex:index];
+        NSLog(@"Voy a meter el parametro: %@",[data terms]);
+        return [[data terms]objectAtIndex:row];
     }else{
         if([[tableView tableColumns]indexOfObject:tableColumn]==0)//Name
             return [[[modelo ecuations]objectAtIndex:row]name];

@@ -24,14 +24,30 @@
 }
 
 -(void)createTitleOfEcuations{
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * sen(b*x)" withCountTerms:2]];
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * cos(b*x)" withCountTerms:2]];
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * x^n" withCountTerms:1]];
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * x + b" withCountTerms:2]];
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * x^2 + b*x + c" withCountTerms:3]];
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a / (b*x)" withCountTerms:2]];
-    NSLog(@"En la pos %i, hay %i terms", 0, [[[self ecuationData]objectAtIndex:0]termCount]);
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * sen(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
+    EcuationData *data =[ecuationData objectAtIndex:0];
+    NSLog(@"LIST: %@",[data terms]);
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * cos(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * x^n" withTerms:[self getArrayOfTerms:@"a",@"n",nil]]];
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * x + b" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a * x^2 + b*x + c" withTerms:[self getArrayOfTerms:@"a",@"b",@"c",nil]]];
+    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a / (b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
 
+}
+-(NSMutableArray *)getArrayOfTerms:(id)terms,...{
+    NSMutableArray *arguments=[[NSMutableArray alloc]initWithArray:nil];
+    id eachObject;
+    va_list argumentList;
+    if(terms){
+        [arguments addObject:terms];
+        va_start(argumentList, terms);
+        while((eachObject = va_arg(argumentList, id))){
+            [arguments addObject: eachObject];
+        }
+        va_end(argumentList);
+    }
+    NSLog(@"LIST DENTRO: %@",arguments);
+    return arguments;
 }
 
 @end

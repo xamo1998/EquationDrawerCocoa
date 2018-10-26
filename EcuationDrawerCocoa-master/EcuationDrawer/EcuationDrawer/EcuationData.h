@@ -13,7 +13,8 @@
 }
 @property NSString *name;
 @property int termCount;
+@property NSMutableArray *terms;
 -(id)initWithName:(NSString *)name
-   withCountTerms:(int)count;
+        withTerms:(NSMutableArray *)terms;
 -(NSString *)getCustomizedName: (NSMutableArray *) terms;
 @end

@@ -11,36 +11,26 @@
 @implementation EcuationData
 @synthesize name;
 @synthesize termCount;
+@synthesize terms;
 -(id)initWithName:(NSString *)name
-   withCountTerms:(int)count{
+        withTerms:(NSMutableArray *)terms{
     self=[super init];
     if(!self){}
     self.name=name;
-    self.termCount=count;
+    terms=terms;
+    termCount=[terms count];
     return self;
 }
 
 -(NSString *)getCustomizedName:(NSMutableArray *) terms{
-    NSString *customName=[[NSString alloc]init];
-    switch ([terms count]) {
-        case 1: //1 parametro: A
-            customName=[name stringByReplacingOccurrencesOfString:@"a" withString:[terms objectAtIndex:0]];
-            break;
-        case 2://2 parametros: A, B
-            customName=[name stringByReplacingOccurrencesOfString:@"a" withString:[terms objectAtIndex:0]];
-            customName=[customName stringByReplacingOccurrencesOfString:@"b" withString:[terms objectAtIndex:1]];
-            break;
-        case 3:
-            customName=[name stringByReplacingOccurrencesOfString:@"a" withString:[terms objectAtIndex:0]];
-            customName=[customName stringByReplacingOccurrencesOfString:@"b" withString:[terms objectAtIndex:1]];
-            customName=[customName stringByReplacingOccurrencesOfString:@"c" withString:[terms objectAtIndex:2]];
-            break;
-        default:
-            break;
+    NSString *customName=name;
+    for(char c='a';c<='w';c++){
+        NSString *letter=[NSString stringWithFormat:@"%c",c];
+        if([customName containsString:letter]){
+            NSString *valueTerm= [terms valueForKey:letter];
+            customName=[customName stringByReplacingOccurrencesOfString:letter withString:valueTerm];
+        }
     }
-    
-    
-    
     return customName;
 }
 @end
