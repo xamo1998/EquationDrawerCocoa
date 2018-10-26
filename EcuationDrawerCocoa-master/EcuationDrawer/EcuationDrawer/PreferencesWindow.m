@@ -31,12 +31,27 @@
 }
 
 //Button Listeners
+
+-(void)drawGraphic:(id)sender{
+    NSInteger index=[ecuationComboBox indexOfSelectedItem];
+    EcuationData *data=[[modelo ecuationData]objectAtIndex:index];
+}
+-(void)removeGraphic:(id)sender{
+    NSInteger index=[ecuationTableView selectedRow];
+    [[modelo ecuations]removeObjectAtIndex:index];
+    [ecuationTableView reloadData];
+}
 -(void)addGraphic:(id)sender{
     NSInteger indexComboBox=[ecuationComboBox indexOfSelectedItem];
     Ecuation *ecuation= [[Ecuation alloc]init];
-    ecuation.name=[nameTextField stringValue];
-    ecuation.color=[colorWell color];
-    ecuation.ecuation=[[[modelo ecuationData]objectAtIndex:indexComboBox]getCustomizedName:termValues];
+    //Poner color!
+    EcuationData *data=[[modelo ecuationData]objectAtIndex:indexComboBox];
+    data.color=[colorWell color];
+    data.displayName=[nameTextField stringValue];
+    ecuation.ecuationData=data;
+    //ecuation.name=[nameTextField stringValue];
+    //ecuation.color=[colorWell color];
+    //ecuation.ecuation=[[[modelo ecuationData]objectAtIndex:indexComboBox]getCustomizedName:termValues];
     [[modelo ecuations]addObject:ecuation];
     [colorWell setColor:[self getRandomColor]];
     [ecuationTableView reloadData];
@@ -62,24 +77,29 @@
     if(tableView==ecuationTableView)return[[modelo ecuations]count];
     return 0;
 }
-
+-(void)tableViewSelectionDidChange:(NSNotification *)notification{
+    if([notification object]==ecuationTableView){
+        if([ecuationTableView selectedRow]<0){
+            [removeGraphicButton setEnabled:NO];
+            return;
+        }
+        [removeGraphicButton setEnabled:YES];
+        
+    }
+}
 -(void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
     if(tableView==ecuationTableView){
         if([[tableView tableColumns]indexOfObject:tableColumn]==2){
-            [cell setBackgroundColor:[[[modelo ecuations]objectAtIndex:row]color]];
+            Ecuation *ecuation=[[modelo ecuations]objectAtIndex:row];
+            [cell setBackgroundColor:[[ecuation ecuationData]color]];
         }
         [cell setDrawsBackground:YES];
     }
     
 }
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
-    NSInteger index = [ecuationComboBox indexOfSelectedItem];
-    EcuationData *data=[[modelo ecuationData]objectAtIndex:index];//Recogemos los datos del combo box seleccionado
-    NSString *termName=[[data terms]objectAtIndex:row]; //Recogemos el nombre del termino
-    float termValue=[object floatValue]; // recogemos el valor que quiere dar el usuario
-    NSDictionary *dictionary = @{termName : [NSNumber numberWithFloat:termValue]}; //Diccionario tipo: 'A';23
     
-    [termValues addObject:dictionary];
+    [termValues addObject:[NSString stringWithFormat:@"%d",[object integerValue]]];
     [paramsTableView reloadData];
     [self checkCorrectGraphic];
 }
@@ -89,22 +109,19 @@
             if([termValues count]<=row) //Puede estar vacio...
                 return @"";
             else{//Devolvemos el valor del parametro que toque
-                NSInteger index = [ecuationComboBox indexOfSelectedItem];
-                EcuationData *data=[[modelo ecuationData]objectAtIndex:index]; //Recogemos el Data
-                NSString *termName=[[data terms]objectAtIndex:row]; //Recogemos el term que ha modificado
-                return [termValues valueForKey:termName]; //Devolvemos el value de key=termName.
+                return [termValues objectAtIndex:row]; //Devolvemos el value de key=termName.
             }
         //Param Name values
         
         NSInteger index = [ecuationComboBox indexOfSelectedItem];
         EcuationData *data=[[modelo ecuationData]objectAtIndex:index];
-        NSLog(@"Voy a meter el parametro: %@",[data terms]);
         return [[data terms]objectAtIndex:row];
     }else{
+        EcuationData *data=[[[modelo ecuations]objectAtIndex:row]ecuationData];
         if([[tableView tableColumns]indexOfObject:tableColumn]==0)//Name
-            return [[[modelo ecuations]objectAtIndex:row]name];
+            return [data displayName];
         else if([[tableView tableColumns]indexOfObject:tableColumn]==1)
-            return [[[modelo ecuations]objectAtIndex:row]ecuation];
+            return [data getCustomizedName:termValues];
         return NULL;
     }
     

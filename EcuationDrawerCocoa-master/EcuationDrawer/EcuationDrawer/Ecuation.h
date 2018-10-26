@@ -7,15 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "EcuationData.h"
 @interface Ecuation : NSObject{
     
     
     NSBezierPath *bezierPath;
 }
 @property NSColor *color;
-@property NSString *name;
-@property NSString *ecuation;
+@property EcuationData *ecuationData;
 @property int termCount;
 @property float *terms;
 -(float) valueAt:(float)x;

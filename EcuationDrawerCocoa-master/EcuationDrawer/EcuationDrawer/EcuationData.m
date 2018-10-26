@@ -17,17 +17,17 @@
     self=[super init];
     if(!self){}
     self.name=name;
-    terms=terms;
+    self.terms=terms;
     termCount=[terms count];
     return self;
 }
 
--(NSString *)getCustomizedName:(NSMutableArray *) terms{
+-(NSString *)getCustomizedName:(NSMutableArray *) termValues{
     NSString *customName=name;
-    for(char c='a';c<='w';c++){
-        NSString *letter=[NSString stringWithFormat:@"%c",c];
+    for(int i=0; i< [termValues count]; i++){
+        NSString *letter=[terms objectAtIndex:i];
         if([customName containsString:letter]){
-            NSString *valueTerm= [terms valueForKey:letter];
+            NSString *valueTerm= [termValues objectAtIndex:i];
             customName=[customName stringByReplacingOccurrencesOfString:letter withString:valueTerm];
         }
     }
