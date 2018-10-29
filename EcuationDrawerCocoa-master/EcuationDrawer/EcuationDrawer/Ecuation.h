@@ -8,13 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "EcuationData.h"
-#import "Brain.h"
 @interface Ecuation : NSObject{
     
     
     NSBezierPath *bezierPath;
 }
-@property Brain *brain;
 @property NSColor *color;
 @property NSString *name, *displayName;
 @property NSMutableArray *params, *paramValues;
