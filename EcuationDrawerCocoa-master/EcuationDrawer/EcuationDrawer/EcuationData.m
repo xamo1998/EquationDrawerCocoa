@@ -21,6 +21,12 @@
     termCount=[terms count];
     return self;
 }
+-(float)valueAt:(float)x withEcuation:(NSString *)ecuation withParams:(NSMutableArray *)params withValueParams:(NSMutableArray *)paramsValue{
+    float yValue;
+    
+    
+    return yValue;
+}
 
 -(NSString *)getCustomizedName:(NSMutableArray *) termValues{
     NSString *customName=name;

@@ -14,6 +14,9 @@
     [super drawRect:dirtyRect];
     // Drawing code here.
     [self drawAxisWithGrid:YES withNumbers:YES withTickMarks:YES withStepValue:5];
+    NSRect bounds =[self bounds];
+    NSGraphicsContext *context = [NSGraphicsContext currentContext];
+    [graphicsController drawPolynomialsInBounds:bounds withGC:context];
     /*NSRect rectY= NSMakeRect(10, 10, 1, 10000);
     NSRect rectX= NSMakeRect(10, 10, 10000, 1);
     NSBezierPath *pathX= [NSBezierPath bezierPathWithRect:rectX];

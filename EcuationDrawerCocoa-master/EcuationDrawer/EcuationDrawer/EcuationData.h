@@ -18,4 +18,6 @@
 -(id)initWithName:(NSString *)name
         withTerms:(NSMutableArray *)terms;
 -(NSString *)getCustomizedName: (NSMutableArray *) terms;
+
+
 @end

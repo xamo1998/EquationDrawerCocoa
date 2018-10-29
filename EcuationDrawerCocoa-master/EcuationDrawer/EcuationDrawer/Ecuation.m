@@ -11,13 +11,15 @@
 static NSRect funcRect = {-10,-10,20,20};
 
 @implementation Ecuation
-@synthesize termCount;
-@synthesize terms;
+@synthesize name;
+@synthesize brain;
+@synthesize displayName;
 - (id)init{
     self=[super init];
     if(!self){
         
     }
+    
     bezierPath=[[NSBezierPath alloc]init];
     return self;
     
@@ -46,4 +48,11 @@ static NSRect funcRect = {-10,-10,20,20};
     [bezierPath stroke];
     [context restoreGraphicsState];
 }
+
+-(float)valueAt:(float)x{
+    
+}
+
+
+
 @end

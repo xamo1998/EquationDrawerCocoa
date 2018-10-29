@@ -8,15 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 #import "EcuationData.h"
+#import "Brain.h"
 @interface Ecuation : NSObject{
     
     
     NSBezierPath *bezierPath;
 }
+@property Brain *brain;
 @property NSColor *color;
-@property EcuationData *ecuationData;
-@property int termCount;
-@property float *terms;
+@property NSString *name, *displayName;
+@property NSMutableArray *params, *paramValues;
 -(float) valueAt:(float)x;
 -(void) drawInRect: (NSRect) bounds
 withGraphicsContext:(NSGraphicsContext *)context;

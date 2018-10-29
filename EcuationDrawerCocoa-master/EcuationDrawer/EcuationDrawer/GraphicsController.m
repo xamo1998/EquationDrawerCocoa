@@ -25,5 +25,10 @@
     preferenceWindow.modelo=modelo;
     [preferenceWindow showWindow:self];
 }
+-(void)drawPolynomialsInBounds:(NSRect)bounds withGC:(NSGraphicsContext *)context{
+    for(Ecuation *e in [modelo ecuations]){
+        [e drawInRect:bounds withGraphicsContext:context];
+    }
+}
 
 @end

@@ -46,9 +46,11 @@
     Ecuation *ecuation= [[Ecuation alloc]init];
     //Poner color!
     EcuationData *data=[[modelo ecuationData]objectAtIndex:indexComboBox];
-    data.color=[colorWell color];
-    data.displayName=[nameTextField stringValue];
-    ecuation.ecuationData=data;
+    [ecuation setColor:[colorWell color]];
+    [ecuation setName:[nameTextField stringValue]];
+    [ecuation setDisplayName:[data getCustomizedName:termValues]];
+    [ecuation setParams:[data terms]];
+    [ecuation setParamValues:termValues];
     //ecuation.name=[nameTextField stringValue];
     //ecuation.color=[colorWell color];
     //ecuation.ecuation=[[[modelo ecuationData]objectAtIndex:indexComboBox]getCustomizedName:termValues];
@@ -81,9 +83,11 @@
     if([notification object]==ecuationTableView){
         if([ecuationTableView selectedRow]<0){
             [removeGraphicButton setEnabled:NO];
+            [drawGraphicButton setEnabled:NO];
             return;
         }
         [removeGraphicButton setEnabled:YES];
+        [drawGraphicButton setEnabled:YES];
         
     }
 }
@@ -91,15 +95,15 @@
     if(tableView==ecuationTableView){
         if([[tableView tableColumns]indexOfObject:tableColumn]==2){
             Ecuation *ecuation=[[modelo ecuations]objectAtIndex:row];
-            [cell setBackgroundColor:[[ecuation ecuationData]color]];
+            [cell setBackgroundColor:[ecuation color]];
         }
         [cell setDrawsBackground:YES];
     }
     
 }
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
-    
-    [termValues addObject:[NSString stringWithFormat:@"%d",[object integerValue]]];
+    [termValues removeObjectAtIndex:row];
+    [termValues insertObject:[NSString stringWithFormat:@"%d",[object integerValue]] atIndex:row];
     [paramsTableView reloadData];
     [self checkCorrectGraphic];
 }
@@ -117,11 +121,11 @@
         EcuationData *data=[[modelo ecuationData]objectAtIndex:index];
         return [[data terms]objectAtIndex:row];
     }else{
-        EcuationData *data=[[[modelo ecuations]objectAtIndex:row]ecuationData];
+        Ecuation *ecuation=[[modelo ecuations]objectAtIndex:row];
         if([[tableView tableColumns]indexOfObject:tableColumn]==0)//Name
-            return [data displayName];
+            return [ecuation name];
         else if([[tableView tableColumns]indexOfObject:tableColumn]==1)
-            return [data getCustomizedName:termValues];
+            return [ecuation displayName];
         return NULL;
     }
     
@@ -154,6 +158,9 @@
     NSInteger index=[ecuationComboBox indexOfSelectedItem];
     if(index>=0){
         [termValues removeAllObjects];
+        for(int i=0; i<[[[modelo ecuationData]objectAtIndex:index]termCount]; i++){
+            [termValues addObject:@""];
+        }
         [paramsTableView reloadData];
         [self checkCorrectGraphic];
     }
