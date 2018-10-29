@@ -6,13 +6,18 @@
 //  Copyright © 2018 xamo. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
 
 @interface EcuationData : NSObject{
     
 }
-@property NSString *name;
+@property NSString *name, *displayName;
+@property NSColor *color;
 @property int termCount;
+@property NSMutableArray *terms;
 -(id)initWithName:(NSString *)name
-   withCountTerms:(int)count;
+        withTerms:(NSMutableArray *)terms;
+-(NSString *)getCustomizedName: (NSMutableArray *) terms;
+
+
 @end

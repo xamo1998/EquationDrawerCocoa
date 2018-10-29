@@ -7,17 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "EcuationData.h"
 @interface Ecuation : NSObject{
     
     
     NSBezierPath *bezierPath;
 }
 @property NSColor *color;
-@property NSString *name;
-@property NSString *ecuation;
-@property int termCount;
-@property float *terms;
+@property NSString *name, *displayName;
+@property NSMutableArray *params, *paramValues;
 -(float) valueAt:(float)x;
 -(void) drawInRect: (NSRect) bounds
 withGraphicsContext:(NSGraphicsContext *)context;

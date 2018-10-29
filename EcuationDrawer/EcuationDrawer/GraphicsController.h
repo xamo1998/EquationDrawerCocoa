@@ -15,5 +15,6 @@
 }
 
 -(IBAction)showPreferences:(id)sender;
+-(void)drawPolynomialsInBounds:(NSRect)bounds withGC:(NSGraphicsContext *)context;
 
 @end

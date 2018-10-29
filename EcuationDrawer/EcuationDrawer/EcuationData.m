@@ -11,12 +11,32 @@
 @implementation EcuationData
 @synthesize name;
 @synthesize termCount;
+@synthesize terms;
 -(id)initWithName:(NSString *)name
-   withCountTerms:(int)count{
+        withTerms:(NSMutableArray *)terms{
     self=[super init];
     if(!self){}
     self.name=name;
-    self.termCount=count;
+    self.terms=terms;
+    termCount=[terms count];
     return self;
+}
+-(float)valueAt:(float)x withEcuation:(NSString *)ecuation withParams:(NSMutableArray *)params withValueParams:(NSMutableArray *)paramsValue{
+    float yValue;
+    
+    
+    return yValue;
+}
+
+-(NSString *)getCustomizedName:(NSMutableArray *) termValues{
+    NSString *customName=name;
+    for(int i=0; i< [termValues count]; i++){
+        NSString *letter=[terms objectAtIndex:i];
+        if([customName containsString:letter]){
+            NSString *valueTerm= [termValues objectAtIndex:i];
+            customName=[customName stringByReplacingOccurrencesOfString:letter withString:valueTerm];
+        }
+    }
+    return customName;
 }
 @end

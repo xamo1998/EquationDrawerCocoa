@@ -18,7 +18,7 @@
     NSMutableArray *termValues;
     IBOutlet NSComboBox *ecuationComboBox;
     IBOutlet NSTextField *nameTextField;
-    IBOutlet NSButton *addGraphicButton,*removeGraphicButton;
+    IBOutlet NSButton *addGraphicButton,*removeGraphicButton,*drawGraphicButton;
     IBOutlet NSColorWell *colorWell;
     IBOutlet NSTableView *ecuationTableView,*paramsTableView;
                                                       
@@ -26,5 +26,5 @@
 @property Modelo *modelo;
 -(IBAction)addGraphic:(id)sender;
 -(IBAction)removeGraphic:(id)sender;
-
+-(IBAction)drawGraphic:(id)sender;
 @end

@@ -7,11 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "GraphicsController.h"
+@class GraphicsController;
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Chart : NSView{
-    
+    IBOutlet __weak GraphicsController *graphicsController;
 }
 
 -(void)drawAxisWithGrid:(bool)grid
