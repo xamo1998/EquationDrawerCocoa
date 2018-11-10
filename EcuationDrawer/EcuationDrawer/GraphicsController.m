@@ -10,6 +10,8 @@
 #import "PreferencesWindow.h"
 
 @implementation GraphicsController
+
+extern NSString * ReloadImageViewNotification;
 extern NSString * DrawGraphicNotification;
 -(id)init{
     self=[super init];
@@ -20,6 +22,10 @@ extern NSString * DrawGraphicNotification;
     [center addObserver:self
                selector:@selector(handleDrawGraphic:)
                    name:DrawGraphicNotification
+                 object:nil];
+    [center addObserver:self
+               selector:@selector(handleReloadImage:)
+                   name:ReloadImageViewNotification
                  object:nil];
     modelo=[[Modelo alloc]init];
     NSLog(@"VALUE: %f", sqrtf(-1.0f));
@@ -34,7 +40,9 @@ extern NSString * DrawGraphicNotification;
     preferenceWindow.modelo=modelo;
     [preferenceWindow showWindow:self];
 }
-
+-(void) handleReloadImage:(NSNotification *)notification{
+    preferenceWindow.currentView=chartView;
+}
 -(void) handleDrawGraphic:(NSNotification *)notification{
     //NSLog(@"Me ha llegado la notificacion");
     [chartView setNeedsDisplay:true];
@@ -54,6 +62,7 @@ extern NSString * DrawGraphicNotification;
 -(void)setFuncRect:(NSRect)funcRect{
     
     [modelo setFuncRect:funcRect];
+    NSLog(@"RECT: %.2f__%.2f_____%.2f__%.2f",funcRect.origin.x, funcRect.origin.y, funcRect.size.width, funcRect.size.height);
     [preferenceWindow updateXandYValues];
     [chartView setNeedsDisplay:true];
 }
@@ -69,15 +78,7 @@ extern NSString * DrawGraphicNotification;
     [preferenceWindow updateXandYValues];
     [chartView setNeedsDisplay:true];*/
     
-    NSView *view=chartView;
-    NSBitmapImageRep *rep=[view bitmapImageRepForCachingDisplayInRect:[view bounds]];
-    [view cacheDisplayInRect:[view bounds] toBitmapImageRep:rep];
-    //NSString *dataPath = [documentsDirectory stringByAppendingPathComponent:@"yourfilename.dat"];
-    NSArray *array= NSSearchPathForDirectoriesInDomains(NSPicturesDirectory, NSUserDomainMask, true);
-    NSLog([array objectAtIndex:0]);
-    //NSFileManager *fileManager =[[NSFileManager alloc]init];
-    NSData *data = [rep representationUsingType:NSPNGFileType  properties:nil];
-    [data writeToFile:[NSString stringWithFormat:@"/Users/%@/Documents/view_fecha.png",NSUserName()] atomically:true];
+    
 }
 -(bool)isNumbersEnabled{return[modelo numbers];}
 -(bool)isGridEnabled{return[modelo grid];}

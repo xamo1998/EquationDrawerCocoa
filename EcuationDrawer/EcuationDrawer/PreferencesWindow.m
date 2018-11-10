@@ -7,6 +7,7 @@
 //
 
 #import "PreferencesWindow.h"
+#import <QuartzCore/QuartzCore.h>
 #define ERROR -99999999
 @interface PreferencesWindow ()
 
@@ -16,6 +17,7 @@
 @synthesize modelo;
 
 NSString * DrawGraphicNotification = @"DrawGraphicNotification";
+NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
 
 - (void)windowDidLoad {
     [super windowDidLoad];
@@ -31,7 +33,6 @@ NSString * DrawGraphicNotification = @"DrawGraphicNotification";
     NSLog(@"LOG(2.7118)=%f :::::::: Log2(2.7118)=%f :::::::: Log10(2.7118)=%f",logf(2.7118), log2(2.7178), log10(2.7118));
     notificationCenter=[NSNotificationCenter defaultCenter];
     //NSLog(@"", [image stri]);
-    [imageView setImage:_image];
     termValues=[[NSMutableArray alloc]init];
     termsValuesInterpeterWindow=[[NSMutableArray alloc]init];
     return self;
@@ -171,7 +172,10 @@ NSString * DrawGraphicNotification = @"DrawGraphicNotification";
 
 - (void)representationValueListener:(id)sender{
     if([[xEnd stringValue]length] > 0 && [[yEnd stringValue]length] > 0 && [[xStart stringValue]length] > 0 && [[yStart stringValue]length] > 0){
-        [modelo setFuncRect: NSMakeRect([xStart floatValue], [yStart floatValue], abs([xStart floatValue])+abs([xEnd floatValue]),abs([yStart floatValue])+abs([yEnd floatValue]))];
+        float width, height;
+        
+        
+        [modelo setFuncRect: NSMakeRect([xStart floatValue], [yStart floatValue], abs([xStart floatValue])+[xEnd floatValue],abs([yStart floatValue])+[yEnd floatValue])];
         [notificationCenter postNotificationName:DrawGraphicNotification object:self];
     }
 }
@@ -188,6 +192,68 @@ NSString * DrawGraphicNotification = @"DrawGraphicNotification";
         else
             [equationTextField setEnabled:false];
         [paramsInterpeterWindow reloadData];
+    }else{
+        NSRect textFieldFrame = [counterInterpeterWindow frame];
+        CGFloat centerX=textFieldFrame.origin.x;
+        CGFloat centerY=textFieldFrame.origin.y;
+        NSPoint origin = NSMakePoint(centerX, centerY);
+        NSPoint one = NSMakePoint(centerX-5, centerY);
+        NSPoint two = NSMakePoint(centerX+5, centerY);
+        
+      //  [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]
+        //counterInterpeterWindow.focusRingType=[NSFocusRingTypeDefault alloc];
+        NSSetFocusRingStyle(NSFocusRingOnly);
+        //[counterInterpeterWindow.focusView ]
+        //counterInterpeterWindow.layer.borderColor=[[NSColor redColor]CGColor];
+        //
+        [counterInterpeterWindow setBackgroundColor:[NSColor redColor]];
+        [NSAnimationContext beginGrouping];
+        [[NSAnimationContext currentContext] setCompletionHandler:^{
+            
+            [NSAnimationContext beginGrouping];
+            [[NSAnimationContext currentContext] setCompletionHandler:^{
+                
+                
+                [NSAnimationContext beginGrouping];
+                [[NSAnimationContext currentContext] setCompletionHandler:^{
+                    
+                    [NSAnimationContext beginGrouping];
+                    [[NSAnimationContext currentContext] setCompletionHandler:^{
+                        
+                        [[NSAnimationContext currentContext] setDuration:0.0175];
+                        [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
+                        [[counterInterpeterWindow animator] setFrameOrigin:origin];
+                        
+                    }];
+                    
+                    [[NSAnimationContext currentContext] setDuration:0.0175];
+                    [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
+                    [[counterInterpeterWindow animator] setFrameOrigin:two];
+                    [NSAnimationContext endGrouping];
+                    
+                }];
+                
+                [[NSAnimationContext currentContext] setDuration:0.0175];
+                [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
+                [[counterInterpeterWindow animator] setFrameOrigin:one];
+                [NSAnimationContext endGrouping];
+            }];
+            
+            [[NSAnimationContext currentContext] setDuration:0.0175];
+            [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
+            [[counterInterpeterWindow animator] setFrameOrigin:two];
+            [NSAnimationContext endGrouping];
+            
+        }];
+        
+        [[NSAnimationContext currentContext] setDuration:0.0175];
+        [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
+        [[counterInterpeterWindow animator] setFrameOrigin:one];
+        [NSAnimationContext endGrouping];
+        
+        counterInterpeterWindow.layer.borderColor=[[NSColor systemBlueColor]CGColor];
+        counterInterpeterWindow.layer.borderWidth=1.0;
+        //[counterInterpeterWindow anim]
     }
     
 }
@@ -195,19 +261,20 @@ NSString * DrawGraphicNotification = @"DrawGraphicNotification";
     NSRect rect=[modelo funcRect];
     [xStart setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.x]];
     [yStart setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.y]];
-    [xEnd setStringValue:[NSString stringWithFormat:@"%.2f",rect.size.width-abs(rect.origin.x)]];
-    [yEnd setStringValue:[NSString stringWithFormat:@"%.2f",rect.size.height-abs(rect.origin.y)]];
+    [xEnd setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.x+rect.size.width]];
+    [yEnd setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.y+rect.size.height]];
 }
 -(void)visualPropertyListener:(id)sender{
-    if(sender==grid)
-        //if([grid state]==){
-         //   [modelo setGrid:t]
-        //} [modelo setGrid:false];
-    if(sender==tickNumbers)
-        [modelo setTickMarks:[tickNumbers state]];
-    if(sender==numbers)
-        [modelo setNumbers:[numbers state]];
-    NSLog(@"GRID:%",[grid isEnabled]);
+    
+    //NSLog(@"%@",[sender object]);
+    
+    if(sender==[grid controlView])
+        [modelo setGrid:![modelo grid]];
+    if(sender==[tickNumbers controlView])
+        [modelo setTickMarks:![modelo tickMarks]];
+    if(sender==[numbers controlView])
+        [modelo setNumbers:![modelo numbers]];
+    //NSLog(@"GRID:%",[grid isEnabled]);
     [notificationCenter postNotificationName:DrawGraphicNotification object:self];
 }
 -(void)tableViewSelectionDidChange:(NSNotification *)notification{
@@ -482,13 +549,59 @@ NSString * DrawGraphicNotification = @"DrawGraphicNotification";
 }
 
 //Checks...
-
+-(void)exportImage:(id)sender{
+    [notificationCenter postNotificationName:ReloadImageViewNotification object:self];
+    NSView *view=_currentView;
+    NSBitmapImageRep *rep=[view bitmapImageRepForCachingDisplayInRect:[view bounds]];
+    [view cacheDisplayInRect:[view bounds] toBitmapImageRep:rep];
+    NSSavePanel *savePanel=[[NSSavePanel alloc]init];
+    NSData *data;
+    NSDate *date=[NSDate date];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+    [dateFormat setDateFormat:@"yyyy-MM-dd-HH.mm.SS"];
+    if([[fileFormatComboBox stringValue]containsString:@"(.png)"]){
+        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.png",[dateFormat stringFromDate:date]]];
+        data=[rep representationUsingType:NSPNGFileType properties:nil];
+    }else if([[fileFormatComboBox stringValue]containsString:@"(.gif)"]){
+        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.gif",[dateFormat stringFromDate:date]]];
+        data=[rep representationUsingType:NSGIFFileType properties:nil];
+    }else if([[fileFormatComboBox stringValue]containsString:@"(.jpeg)"]){
+        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.jpeg",[dateFormat stringFromDate:date]]];
+        data=[rep representationUsingType:NSJPEGFileType properties:nil];
+    }else if([[fileFormatComboBox stringValue]containsString:@"(.bmp)"]){
+        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.bmp",[dateFormat stringFromDate:date]]];
+        data=[rep representationUsingType:NSBMPFileType properties:nil];
+    }else if([[fileFormatComboBox stringValue]containsString:@"(.jp2)"]){
+        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.jp2",[dateFormat stringFromDate:date]]];
+        data=[rep representationUsingType:NSJPEG2000FileType properties:nil];
+    }
+    [savePanel setCanCreateDirectories:true];
+    [savePanel setPrompt:@"Save"];
+    [savePanel beginWithCompletionHandler:^(NSInteger result){
+        if(result==NSFileHandlingPanelOKButton){
+            NSFileManager *manager = [NSFileManager defaultManager];
+            NSURL *saveURL=[savePanel URL];
+            //NSData *data =[rep representationUsingType:NSPNGFileType properties:nil];
+            [data writeToURL:saveURL atomically:true];
+        }
+    }];
+    
+   
+}
 -(void)controlTextDidChange:(NSNotification *)obj{
     //NSLog(@"FDF");
     if([obj object]==equationTextField){
         NSInteger length=[[equationTextField stringValue]length];
-        if([[[equationTextField stringValue]substringFromIndex:length-1]floatValue]!=0 || [[[equationTextField stringValue]substringFromIndex:length-1]isEqualToString:@"0"]){
-            [equationTextField setStringValue:[[equationTextField stringValue]substringToIndex:length-1]];
+        NSRange range;
+        for(int i=0; i<[[equationTextField stringValue]length];i++){
+            range.length=1;
+            range.location=i;
+            if([[[equationTextField stringValue]substringWithRange:range]floatValue]!=0 || [[[equationTextField stringValue]substringWithRange:range]isEqualToString:@"0"]){
+                NSString *begin, *end;
+                begin=[[equationTextField stringValue]substringToIndex:i];
+                end=[[equationTextField stringValue]substringFromIndex:i+1];
+                [equationTextField setStringValue: [NSString stringWithFormat:@"%@%@",begin,end]];
+            }
         }
         if([[equationTextField stringValue]length]==0){
             [addInterpeterWindow setEnabled:false];

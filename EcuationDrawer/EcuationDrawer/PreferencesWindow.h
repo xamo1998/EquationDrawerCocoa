@@ -18,8 +18,7 @@
     NSNotificationCenter *notificationCenter;
     NSMutableArray *termValues, *termsValuesInterpeterWindow;
     IBOutlet NSSlider *widthSlider;
-    IBOutlet NSImageView *imageView;
-    IBOutlet NSComboBox *ecuationComboBox;
+    IBOutlet NSComboBox *ecuationComboBox, *fileFormatComboBox;
     IBOutlet NSButtonCell *grid, *numbers, *tickNumbers;
     IBOutlet NSTextField *nameTextField, *counterInterpeterWindow, *equationTextField, *nameTextFieldInterpeterWindow, *nameTextFieldPreferences;
     IBOutlet NSTextField *xStart, *yStart, *xEnd, *yEnd;
@@ -31,7 +30,7 @@
                                                       
 }
 @property Modelo *modelo;
-@property NSImage *image;
+@property NSView *currentView;
 -(void)updateXandYValues;
 -(bool)checkCorrectEquation;
 -(IBAction)addGraphic:(id)sender;

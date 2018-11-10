@@ -107,23 +107,23 @@
             if(_finalEndDraggedPoint.y-_finalStartDraggedPoint.y>0)
                 [graphicsController setFuncRect:NSMakeRect(_finalStartDraggedPoint.x, _finalStartDraggedPoint.y, _finalEndDraggedPoint.x-_finalStartDraggedPoint.x, _finalEndDraggedPoint.y-_finalStartDraggedPoint.y)];
             else{
-                
-                height=abs(_finalStartDraggedPoint.y)+abs(_finalEndDraggedPoint.y);
-                width=abs(_finalEndDraggedPoint.x)+abs(_finalEndDraggedPoint.x);
+                NSLog(@"Checking");
+                height=_finalStartDraggedPoint.y-_finalEndDraggedPoint.y;
+                width=_finalEndDraggedPoint.x-_finalStartDraggedPoint.x;
                 [graphicsController setFuncRect:NSMakeRect(_finalStartDraggedPoint.x, _finalEndDraggedPoint.y, width, height)];
             }
         
-            else{
-                if(_finalEndDraggedPoint.y-_finalStartDraggedPoint.y>0){
-                    height=abs(_finalEndDraggedPoint.y)+abs(_finalStartDraggedPoint.y);
-                    width=abs(_finalStartDraggedPoint.x)+abs(_finalEndDraggedPoint.x);
-                    [graphicsController setFuncRect:NSMakeRect(_finalEndDraggedPoint.x, _finalStartDraggedPoint.y, width, height)];
-                }else{
-                    height=abs(_finalEndDraggedPoint.y)+abs(_finalStartDraggedPoint.y);
-                    width=abs(_finalEndDraggedPoint.x)+abs(_finalStartDraggedPoint.x);
-                    [graphicsController setFuncRect:NSMakeRect(_finalEndDraggedPoint.x, _finalEndDraggedPoint.y, width, height)];
-                }
+        else{
+            if(_finalEndDraggedPoint.y-_finalStartDraggedPoint.y>0){
+                height=_finalEndDraggedPoint.y-_finalStartDraggedPoint.y;
+                width=_finalStartDraggedPoint.x-_finalEndDraggedPoint.x;
+                [graphicsController setFuncRect:NSMakeRect(_finalEndDraggedPoint.x, _finalStartDraggedPoint.y, width, height)];
+            }else{
+                height=_finalStartDraggedPoint.y-_finalEndDraggedPoint.y;
+                width=_finalStartDraggedPoint.x-_finalEndDraggedPoint.x;
+                [graphicsController setFuncRect:NSMakeRect(_finalEndDraggedPoint.x, _finalEndDraggedPoint.y, width, height)];
             }
+        }
             
     }
 }
@@ -151,50 +151,39 @@
         [self drawNumbers];
     
     
-    
-    
     //Dibujamos los ejes
     NSRect rectX, rectY;
     NSBezierPath *pathY, *pathX;
     float lineWidth=[graphicsController getWidthOfGridLine];
     [[NSColor blackColor]set];
-    if(funcRect.origin.x<0){
-        if(funcRect.origin.y<0)
-            rectX=NSMakeRect(funcRect.origin.x, 0, funcRect.size.width, lineWidth*funcRect.size.height/200);
-        else
-            rectX=NSMakeRect(funcRect.origin.x, funcRect.origin.y, funcRect.size.width, lineWidth*funcRect.size.height/200);
-    }else{
-        if(funcRect.origin.y<0)
-            rectX=NSMakeRect(0, 0, funcRect.size.width+funcRect.origin.x, lineWidth*funcRect.size.height/200);
-        else
-            rectX=NSMakeRect(0, funcRect.origin.y, funcRect.size.width+funcRect.origin.x, lineWidth*funcRect.size.height/200);
-    }
-    if(funcRect.origin.y<0){
-        if(funcRect.origin.x<0)
-            rectY=NSMakeRect(0, funcRect.origin.y, lineWidth*funcRect.size.width/200, funcRect.size.height);
-        else
-            rectY=NSMakeRect(funcRect.origin.x, funcRect.origin.y, lineWidth*funcRect.size.width/200, funcRect.size.height);
-    }else{
-        if(funcRect.origin.x<0)
-            rectY=NSMakeRect(0, 0, lineWidth*funcRect.size.width/200, funcRect.size.height+funcRect.origin.y);
-        else
-            rectY=NSMakeRect(funcRect.origin.x, 0, lineWidth*funcRect.size.width/200, funcRect.size.height+funcRect.origin.y);
-    }
+    float xMin, xMax, yMin, yMax;
+    xMin=funcRect.origin.x;
+    yMin=funcRect.origin.y;
+    xMax=funcRect.size.width-(-xMin);
+    yMax=funcRect.size.height-(-yMin);
+    float widthConstantY=funcRect.size.height/200;
+    float widthConstantX=funcRect.size.width/200;
+    NSLog(@"xMin:%.2f__xMax:%.2f\nyMin:%.2f__yMax:%.2f",xMin,xMax,yMin,yMax);
+    //Eje Y:
+    if(xMin<0 && xMax<=0)
+        rectY=NSMakeRect(xMax, yMin,lineWidth*widthConstantX,yMax+(-yMin));
+    if(xMin<0 && xMax>0)
+        rectY=NSMakeRect(0, yMin, lineWidth*widthConstantX, yMax+(-yMin));
+    if(xMin>=0 && xMax>0)
+        rectY=NSMakeRect(xMin, yMin, lineWidth*widthConstantX, yMax+(-yMin));
+    //Eje X:
+    if(yMin<0 && yMax<=0)
+        rectX=NSMakeRect(xMin, yMax, xMax+(-xMin), lineWidth*widthConstantY);
+    if(yMin<0 && yMax>0)
+        rectX=NSMakeRect(xMin, 0, xMax+(-xMin), lineWidth*widthConstantY);
+    if(yMin>0 && yMax>0)
+        rectX=NSMakeRect(xMin, yMin, xMax+(-xMin), lineWidth*widthConstantY);
+    
     pathX=[NSBezierPath bezierPathWithRect:rectX];
     pathY=[NSBezierPath bezierPathWithRect:rectY];
     [pathX fill];
     [pathY fill];
-    
-    
-    /*NSRect rectX= NSMakeRect(0, maxHeight/2, maxWidth,0.3);
-    NSRect rectY= NSMakeRect(maxWidth/2, 0, 0.3, maxHeight);
-    NSBezierPath *pathX=[NSBezierPath bezierPathWithRect:rectX];
-    NSBezierPath *pathY=[NSBezierPath bezierPathWithRect:rectY];
-    [pathX stroke];
-    [pathY stroke];
-    [[NSColor blackColor]set];
-    [pathX fill];
-    [pathY fill];*/
+
 }
 
 -(void)drawTickMarks{
@@ -203,75 +192,104 @@
     int contadorDarkGrey=0;
     float lineWidth=[graphicsController getWidthOfGridLine];
     NSRect funcRect=[graphicsController getFuncRect];
-    float stepValueX=(funcRect.size.width-funcRect.origin.x)/14;
-    float stepValueY=(funcRect.size.height-funcRect.origin.y)/10;
+    float stepValueX=(funcRect.size.width)/14.0;
+    float stepValueY=(funcRect.size.height)/10.0;
+    //===========================
+    float xMin, xMax, yMin, yMax;
+    xMin=funcRect.origin.x;
+    yMin=funcRect.origin.y;
+    xMax=funcRect.size.width-(-xMin);
+    yMax=funcRect.size.height-(-yMin);
+    float widthConstantY=funcRect.size.height/200;
+    float widthConstantX=funcRect.size.width/200;
+    NSLog(@"xMin:%.2f__xMax:%.2f\nyMin:%.2f__yMax:%.2f",xMin,xMax,yMin,yMax);
+    
     
     [[NSColor blackColor]set];
-    if(funcRect.origin.y<0){
-        if(funcRect.origin.x<0){
-            for(float i=stepValueX; i<=funcRect.size.width;i+=stepValueX){ //Grid Vertical Positivo
-                rectY=NSMakeRect(i, -stepValueY/8, lineWidth*funcRect.size.width/200, 2*stepValueY/8);
-                pathY=[NSBezierPath bezierPathWithRect:rectY];
-                [pathY fill];
-                
-            }
-        }else{
-            for(float i=funcRect.origin.x+stepValueX; i<=funcRect.size.width;i+=stepValueX){ //Grid Vertical Positivo
-                rectY=NSMakeRect(i, -stepValueY/8, lineWidth*funcRect.size.width/200, 2*stepValueY/8);
-                pathY=[NSBezierPath bezierPathWithRect:rectY];
-                [pathY fill];
-                
-            }
-        }
-        
-    }else{
-        if(funcRect.origin.x<0){
-            for(float i=stepValueX; i<=funcRect.size.width;i+=stepValueX){ //Grid Vertical Positivo
-                rectY=NSMakeRect(i, funcRect.origin.y, lineWidth*funcRect.size.width/200, 2*stepValueY/8);
-                pathY=[NSBezierPath bezierPathWithRect:rectY];
-                [pathY fill];
-                
-            }
-        }else{
-            for(float i=funcRect.origin.x+stepValueX; i<=funcRect.size.width;i+=stepValueX){ //Grid Vertical Positivo
-                rectY=NSMakeRect(i, funcRect.origin.y, lineWidth*funcRect.size.width/200, 2*stepValueY/8);
-                pathY=[NSBezierPath bezierPathWithRect:rectY];
-                [pathY fill];
-                
-            }
-        }
-        
-    }
-    
-    if(funcRect.origin.x<0){
-        for(float i=-stepValueX; i>=funcRect.origin.x;i-=stepValueX){ //Grid Vertical Negativo
-            rectY=NSMakeRect(i, -stepValueY/8, lineWidth*funcRect.size.width/200, 2*stepValueY/8);
+    //Eje X:
+    float yPosition;
+    if(xMin>=0){
+        if(funcRect.origin.y<=0 && yMax>0) yPosition=0;
+        else if(funcRect.origin.y>0) yPosition=funcRect.origin.y;
+        else yPosition=yMax;
+        for(float i=xMin+stepValueX; i<=funcRect.size.width+xMin;i+=stepValueX){ //Grid Vertical Positivo
+            NSLog(@"a");
+            rectY=NSMakeRect(i, yPosition-(stepValueY/8), lineWidth*funcRect.size.width/200, 2*stepValueY/8);
             pathY=[NSBezierPath bezierPathWithRect:rectY];
             [pathY fill];
         }
+    }if(xMin<0 && xMax>0){
+        
+        if(funcRect.origin.y<=0 && yMax>0) yPosition=0;
+        else if(funcRect.origin.y>0) yPosition=funcRect.origin.y;
+        else yPosition=yMax;
+        for(float i=stepValueX; i<=funcRect.size.width;i+=stepValueX){ //Grid Vertical Positivo
+            rectY=NSMakeRect(i, yPosition-(stepValueY/8), lineWidth*funcRect.size.width/200, 2*stepValueY/8);
+            pathY=[NSBezierPath bezierPathWithRect:rectY];
+            [pathY fill];
+            
+        }
+        for(float i=-stepValueX; i>=funcRect.origin.x;i-=stepValueX){ //Grid Vertical Positivo
+            rectY=NSMakeRect(i, yPosition-(stepValueY/8), lineWidth*funcRect.size.width/200, 2*stepValueY/8);
+            pathY=[NSBezierPath bezierPathWithRect:rectY];
+            [pathY fill];
+            
+        }
+    }if(xMax<=0){
+        
+        if(funcRect.origin.y<=0 && yMax>0) yPosition=0;
+        else if(funcRect.origin.y>0) yPosition=funcRect.origin.y;
+        else yPosition=yMax;
+        for(float i=xMax-stepValueX; i>=funcRect.origin.x;i-=stepValueX){ //Grid Vertical Positivo
+            rectY=NSMakeRect(i, yPosition-(stepValueY/8), lineWidth*funcRect.size.width/200, 2*stepValueY/8);
+            pathY=[NSBezierPath bezierPathWithRect:rectY];
+            [pathY fill];
+            
+        }
+        
     }
     
-    if(funcRect.origin.x<0){
-        for(float i=stepValueY; i<=funcRect.size.height;i+=stepValueY){
-            rectX=NSMakeRect(-stepValueX/8, i, 2*stepValueX/8, lineWidth*funcRect.size.height/200);
+    //Eje Y
+    
+    float xPosition;
+    if(yMin>=0){
+        if(funcRect.origin.x<=0 && xMax>0) xPosition=0;
+        else if(funcRect.origin.x>0) xPosition=funcRect.origin.x;
+        else xPosition=xMax;
+        for(float i=yMin+stepValueY; i<=funcRect.size.height+yMin;i+=stepValueY){ //Grid Vertical Positivo
+            rectX=NSMakeRect(xPosition-(stepValueX/8),i, 2*stepValueX/8,lineWidth*funcRect.size.height/200);
             pathX=[NSBezierPath bezierPathWithRect:rectX];
             [pathX fill];
         }
-    }else{
-        for(float i=stepValueY; i<=funcRect.size.height;i+=stepValueY){
-            rectX=NSMakeRect(funcRect.origin.x, i, 2*stepValueX/8, lineWidth*funcRect.size.height/200);
+    }if(yMin<0 && yMax>0){
+        
+        if(funcRect.origin.x<=0 && xMax>0) xPosition=0;
+        else if(funcRect.origin.x>0) xPosition=funcRect.origin.x;
+        else xPosition=xMax;
+        for(float i=stepValueY; i<=funcRect.size.height;i+=stepValueY){ //Grid Vertical Positivo
+            rectX=NSMakeRect(xPosition-(stepValueX/8),i, 2*stepValueX/8,lineWidth*funcRect.size.height/200);
+            pathX=[NSBezierPath bezierPathWithRect:rectX];
+            [pathX fill];
+            
+        }
+        for(float i=-stepValueY; i>=funcRect.origin.y;i-=stepValueY){ //Grid Vertical Positivo
+            rectX=NSMakeRect(xPosition-(stepValueX/8),i,2*stepValueX/8 ,lineWidth*funcRect.size.height/200);
+            pathX=[NSBezierPath bezierPathWithRect:rectX];
+            [pathX fill];
+            
+        }
+    }if(yMax<=0){
+        
+        if(funcRect.origin.x<=0 && xMax>0) xPosition=0;
+        else if(funcRect.origin.x>0) xPosition=funcRect.origin.x;
+        else xPosition=xMax;
+        for(float i=yMax-stepValueY; i>=funcRect.origin.y;i-=stepValueY){ //Grid Vertical Positivo
+            rectX=NSMakeRect(xPosition-(stepValueX/8),i, 2*stepValueX/8,lineWidth*funcRect.size.height/200);
             pathX=[NSBezierPath bezierPathWithRect:rectX];
             [pathX fill];
         }
     }
-    if(funcRect.origin.y<0){
-        for(float i=-stepValueY; i>=funcRect.origin.y;i-=stepValueY){
-            contadorDarkGrey++;
-            rectX=NSMakeRect(-stepValueX/8, i, 2*stepValueX/8, lineWidth*funcRect.size.height/200);
-            pathX=[NSBezierPath bezierPathWithRect:rectX];
-            [pathX fill];
-        }
-    }
+    
 }
 -(void)drawNumbers{
     int contadorNumbers=0;
@@ -282,8 +300,8 @@
     textSize=[graphicsController getTextSize];
     offsetX=[graphicsController getXOffsetForNumbers];
     offsetY=[graphicsController getYOffsetForNumbers];
-    float stepValueX=(funcRect.size.width-funcRect.origin.x)/14;
-    float stepValueY=(funcRect.size.height-funcRect.origin.y)/10;
+    float stepValueX=(funcRect.size.width)/14.0;
+    float stepValueY=(funcRect.size.height)/10.0;
     NSDictionary *attributesWidth=[NSDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:textSize*funcRect.size.width/200], NSFontAttributeName, nil];
     NSDictionary *attributesHeight=[NSDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:textSize*funcRect.size.height/200], NSFontAttributeName, nil];
     if(funcRect.origin.y<0){
@@ -294,7 +312,7 @@
         }
         
     }else{
-        for(float i=funcRect.origin.x; i<=funcRect.size.width;i+=stepValueX){ //Grid Vertical Positivo
+        for(float i=funcRect.origin.x; i<=funcRect.size.width+funcRect.origin.x;i+=stepValueX){ //Grid Vertical Positivo
             NSAttributedString *string = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.2f",i]attributes:attributesWidth];
             //NSLog(@"HOLA %.2f",i-(maxPoint.x/2));
             [string drawAtPoint:NSMakePoint(i, 0)]; //+5 bc of spacing
@@ -318,7 +336,7 @@
             [string drawAtPoint:NSMakePoint(0, i)]; //+5 bc of spacing
         }
     }else{
-        for(float i=funcRect.origin.y; i<=funcRect.size.height;i+=stepValueY){
+        for(float i=funcRect.origin.y; i<=funcRect.size.height+funcRect.origin.y;i+=stepValueY){
             NSAttributedString *string = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.2f",i]attributes:attributesWidth];
             //NSLog(@"HOLA %.2f",i-(maxPoint.x/2));
             [string drawAtPoint:NSMakePoint(0, i)]; //+5 bc of spacing
@@ -341,58 +359,77 @@
     int contadorDarkGrey=0;
     float lineWidth=[graphicsController getWidthOfGridLine];
     NSRect funcRect=[graphicsController getFuncRect];
-    float stepValueX=(funcRect.size.width-funcRect.origin.x)/14;
-    float stepValueY=(funcRect.size.height-funcRect.origin.y)/10;
+    float stepValueX=(funcRect.size.width)/14.0;
+    float stepValueY=(funcRect.size.height)/10.0;
     
+    float xMin, xMax, yMin, yMax;
+    xMin=funcRect.origin.x;
+    yMin=funcRect.origin.y;
+    xMax=funcRect.size.width-(-xMin);
+    yMax=funcRect.size.height-(-yMin);
+    float widthConstantY=funcRect.size.height/200;
+    float widthConstantX=funcRect.size.width/200;
     [[NSColor gridColor]set];
-    if(funcRect.origin.x<0){
+    
+    //Eje X:
+    float yPosition;
+    float yEnd;
+    if(xMin>=0){
+        for(float i=xMin+stepValueX; i<=funcRect.size.width+xMin;i+=stepValueX){ //Grid Vertical Positivo
+            rectY=NSMakeRect(i, yMin, lineWidth*funcRect.size.width/200, funcRect.size.height);
+            pathY=[NSBezierPath bezierPathWithRect:rectY];
+            [pathY fill];
+        }
+    }if(xMin<0 && xMax>0){
         for(float i=stepValueX; i<=funcRect.size.width;i+=stepValueX){ //Grid Vertical Positivo
-            rectY=NSMakeRect(i, funcRect.origin.y, lineWidth*funcRect.size.width/200, maxPoint.y);
+            rectY=NSMakeRect(i, yMin, lineWidth*funcRect.size.width/200, funcRect.size.height);
             pathY=[NSBezierPath bezierPathWithRect:rectY];
             [pathY fill];
             
         }
-    }else{
-        for(float i=funcRect.origin.x; i<=funcRect.size.width;i+=stepValueX){ //Grid Vertical Positivo
-            rectY=NSMakeRect(i, funcRect.origin.y, lineWidth*funcRect.size.width/200, maxPoint.y);
+        for(float i=-stepValueX; i>=funcRect.origin.x;i-=stepValueX){ //Grid Vertical Positivo
+            rectY=NSMakeRect(i, yMin, lineWidth*funcRect.size.width/200, funcRect.size.height);
             pathY=[NSBezierPath bezierPathWithRect:rectY];
             [pathY fill];
             
         }
-    }
-    
-    if(funcRect.origin.x<0){
-        for(float i=-stepValueX; i>=funcRect.origin.x;i-=stepValueX){ //Grid Vertical Negativo
-            rectY=NSMakeRect(i, funcRect.origin.y, lineWidth*funcRect.size.width/200, maxPoint.y);
+    }if(xMax<=0){
+        for(float i=xMax-stepValueX; i>=funcRect.origin.x;i-=stepValueX){ //Grid Vertical Positivo
+            rectY=NSMakeRect(i, yMin, lineWidth*funcRect.size.width/200, funcRect.size.height);
             pathY=[NSBezierPath bezierPathWithRect:rectY];
             [pathY fill];
+            
         }
-    }//No hacemos nada
+        
+    }
     
-    if(funcRect.origin.y<0){
-        for(float i=stepValueY; i<=maxPoint.y;i+=stepValueY){
-            rectX=NSMakeRect(funcRect.origin.x, i, maxPoint.x, lineWidth*funcRect.size.height/200);
+    
+    //Eje Y
+    float xPosition;
+    if(yMin>=0){
+        for(float i=yMin+stepValueY; i<=funcRect.size.height+yMin;i+=stepValueY){ //Grid Vertical Positivo
+            rectX=NSMakeRect(xMin,i, funcRect.size.width,lineWidth*funcRect.size.height/200);
             pathX=[NSBezierPath bezierPathWithRect:rectX];
             [pathX fill];
         }
-    }else{
-        for(float i=funcRect.origin.y; i<=maxPoint.y;i+=stepValueY){
-            rectX=NSMakeRect(funcRect.origin.x, i, maxPoint.x, lineWidth*funcRect.size.height/200);
+    }if(yMin<0 && yMax>0){
+        for(float i=stepValueY; i<=funcRect.size.height;i+=stepValueY){ //Grid Vertical Positivo
+            rectX=NSMakeRect(xMin,i, funcRect.size.width,lineWidth*funcRect.size.height/200);
+            pathX=[NSBezierPath bezierPathWithRect:rectX];
+            [pathX fill];
+        }
+        for(float i=-stepValueY; i>=funcRect.origin.y;i-=stepValueY){ //Grid Vertical Positivo
+            rectX=NSMakeRect(xMin,i,funcRect.size.width ,lineWidth*funcRect.size.height/200);
+            pathX=[NSBezierPath bezierPathWithRect:rectX];
+            [pathX fill];
+        }
+    }if(yMax<=0){
+        for(float i=yMax-stepValueY; i>=funcRect.origin.y;i-=stepValueY){ //Grid Vertical Positivo
+            rectX=NSMakeRect(xMin,i, funcRect.size.width,lineWidth*funcRect.size.height/200);
             pathX=[NSBezierPath bezierPathWithRect:rectX];
             [pathX fill];
         }
     }
-    if(funcRect.origin.y<0){
-        for(float i=-stepValueY; i>=funcRect.origin.y;i-=stepValueY){
-            contadorDarkGrey++;
-            rectX=NSMakeRect(funcRect.origin.x, i, maxPoint.x, lineWidth*funcRect.size.height/200);
-            pathX=[NSBezierPath bezierPathWithRect:rectX];
-            [pathX fill];
-        }
-    }
-    
-    
-    //[self drawNumbers:stepValue withMaxPoint:maxPoint];
 }
 
 @end

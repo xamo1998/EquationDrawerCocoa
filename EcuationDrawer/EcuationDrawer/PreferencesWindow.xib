@@ -23,6 +23,7 @@
                 <outlet property="ecuationTableView" destination="CYc-sM-Y7c" id="EEC-xB-vT9"/>
                 <outlet property="equationTextField" destination="Hkm-c6-DmZ" id="J4p-se-Wla"/>
                 <outlet property="equationsInterpeterWindow" destination="C50-4o-wsU" id="Kcq-pj-tfD"/>
+                <outlet property="fileFormatComboBox" destination="LN7-zT-EQg" id="Ya2-XX-NVi"/>
                 <outlet property="functionColorWell" destination="gIX-82-WiM" id="80o-yF-P9O"/>
                 <outlet property="grid" destination="7R2-RZ-Zke" id="KSN-NM-fPp"/>
                 <outlet property="moveToLeft" destination="zPM-DY-Ufu" id="jKR-zt-Puu"/>
@@ -822,8 +823,16 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </tableHeaderView>
                                         </scrollView>
+                                        <colorWell fixedFrame="YES" enabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gIX-82-WiM">
+                                            <rect key="frame" x="441" y="409" width="68" height="23"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <color key="color" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <connections>
+                                                <action selector="changeColorListener:" target="-2" id="p4c-is-i01"/>
+                                            </connections>
+                                        </colorWell>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uGo-ae-FAe">
-                                            <rect key="frame" x="388" y="399" width="37" height="17"/>
+                                            <rect key="frame" x="388" y="412" width="37" height="17"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Color" id="gKP-7e-1iD">
                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -856,7 +865,7 @@
                                         <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cow-Eo-Xon">
                                             <rect key="frame" x="142" y="192" width="44" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="color" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <connections>
                                                 <action selector="changeColorListener:" target="-2" id="pQ3-1N-wgd"/>
                                             </connections>
@@ -1069,25 +1078,46 @@
                                                     <string>Portable Network Graphics (.png)</string>
                                                     <string>Graphics Interchange Format (.gif)</string>
                                                     <string>Joint Photographic Expers Group (.jpeg)</string>
+                                                    <string>Joint Photographic Expert 2000 (.jp2)</string>
+                                                    <string>Windows bitmap (.bmp)</string>
                                                 </objectValues>
                                             </comboBoxCell>
                                         </comboBox>
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4or-e8-Yy0">
                                             <rect key="frame" x="477" y="348" width="237" height="24"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" enabled="NO" state="on" alignment="left" minValue="0.10000000000000001" maxValue="1" doubleValue="0.59999999999999998" tickMarkPosition="above" numberOfTickMarks="10" allowsTickMarkValuesOnly="YES" sliderType="linear" id="VXo-8J-2wW"/>
+                                            <sliderCell key="cell" continuous="YES" enabled="NO" state="on" alignment="left" minValue="0.01" maxValue="1" doubleValue="0.5" tickMarkPosition="above" numberOfTickMarks="30" sliderType="linear" id="VXo-8J-2wW"/>
                                             <connections>
                                                 <action selector="widthSliderListener:" target="-2" id="Sk8-WG-Hl4"/>
                                             </connections>
                                         </slider>
-                                        <colorWell fixedFrame="YES" enabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gIX-82-WiM">
-                                            <rect key="frame" x="441" y="393" width="68" height="23"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <action selector="changeColorListener:" target="-2" id="p4c-is-i01"/>
-                                            </connections>
-                                        </colorWell>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iw2-Lt-cgg">
+                                            <rect key="frame" x="477" y="373" width="23" height="11"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="0.01" id="9uA-LA-raT">
+                                                <font key="font" metaFont="system" size="9"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H4D-Hy-Xni">
+                                            <rect key="frame" x="691" y="373" width="17" height="11"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="1.0" id="2cm-xK-ZVy">
+                                                <font key="font" metaFont="system" size="9"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ykZ-qU-uF8">
+                                            <rect key="frame" x="584" y="373" width="18" height="11"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="0.5" id="CWA-kB-P56">
+                                                <font key="font" metaFont="system" size="9"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
