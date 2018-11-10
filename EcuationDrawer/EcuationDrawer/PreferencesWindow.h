@@ -15,16 +15,37 @@
                                                   NSComboBoxDelegate,
                                                   NSTableViewDataSource,
                                                   NSTableViewDelegate>{
-    NSMutableArray *termValues;
+    NSNotificationCenter *notificationCenter;
+    NSMutableArray *termValues, *termsValuesInterpeterWindow;
+    IBOutlet NSSlider *widthSlider;
+    IBOutlet NSImageView *imageView;
     IBOutlet NSComboBox *ecuationComboBox;
-    IBOutlet NSTextField *nameTextField;
-    IBOutlet NSButton *addGraphicButton,*removeGraphicButton,*drawGraphicButton;
-    IBOutlet NSColorWell *colorWell;
-    IBOutlet NSTableView *ecuationTableView,*paramsTableView;
+    IBOutlet NSButtonCell *grid, *numbers, *tickNumbers;
+    IBOutlet NSTextField *nameTextField, *counterInterpeterWindow, *equationTextField, *nameTextFieldInterpeterWindow, *nameTextFieldPreferences;
+    IBOutlet NSTextField *xStart, *yStart, *xEnd, *yEnd;
+    IBOutlet NSButton *addGraphicButton,*removeGraphicButton,*drawGraphicButton, *moveToRight, *moveToLeft, *addInterpeterWindow,*removeGraphicButtonInterpeterWindow,*drawGraphicButtonInterpeterWindow,
+        *moveToRightInterpeterWindow, *moveToLeftInterpeterWindow;
+    IBOutlet NSColorWell *colorWell, *colorWellInterpeterWindow, *backgroundColor, *functionColorWell;
+    IBOutlet NSTableView *ecuationTableView,*paramsTableView, *drawedEquations, *paramsInterpeterWindow, *equationsInterpeterWindow,*drawedEquationsInterpeterWindow,
+                                                      *allEquationsTableView;
                                                       
 }
 @property Modelo *modelo;
+@property NSImage *image;
+-(void)updateXandYValues;
+-(bool)checkCorrectEquation;
 -(IBAction)addGraphic:(id)sender;
+-(IBAction)visualPropertyListener:(id)sender;
+-(IBAction)nameVisualPreferenceEditTextListener:(id)sender;
+-(IBAction)representationValueListener:(id)sender;
 -(IBAction)removeGraphic:(id)sender;
 -(IBAction)drawGraphic:(id)sender;
+-(IBAction)sendToLeft:(id)sender;
+-(IBAction)sendToRight:(id)sender;
+-(IBAction)exportImage:(id)sender;
+-(IBAction)customParamsEditTextListener:(id)sender;
+-(IBAction)changeColorListener:(id)sender;
+-(IBAction)addGraphicInterpeterWindow:(id)sender;
+-(IBAction)widthSliderListener:(id)sender;
+-(IBAction)qualitySliderListener:(id)sender;
 @end

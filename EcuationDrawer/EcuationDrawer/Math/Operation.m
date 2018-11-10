@@ -28,6 +28,7 @@
         [_splitted appendString:letter];
         [_splitted appendString:@", "];
     }
+    range.location=0;
     range.length=[_splitted length]-2;
     [_splitted setString:[_splitted substringWithRange:range]];
     return self;
