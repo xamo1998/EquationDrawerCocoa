@@ -29,7 +29,6 @@
     for(int i=0; i<[_finalEquationSplitted count]; i++){
         [_equationSplitted addObject:[_finalEquationSplitted objectAtIndex:i]];
     }
-    float y=0;
     float value=0;
     
     NSPoint position=[self getIndexOfDeepestParetheses]; //x=Start, y=end
@@ -378,7 +377,7 @@
     //NSLog(number);
     if([number isEqualTo:@"e"])return NO;
     if([number isEqualTo:@"("]) return NO;
-    if([number isEqualTo:@"0.000000"])return true; //CAMBIAR!!!!
+    if([number isEqualTo:@"0.000000"])return true;
     if([number isEqualTo:@"-0.000000"])return true;
     float value=[number floatValue];
     if(value==0)

@@ -52,7 +52,7 @@
         point.y=[self valueAt:point.x];
         if(point.y!=NaN){
             //NSLog(@"X:%f    Y:%f",point.x,point.y);
-            if((previousPoint.y>0 && point.y<0 && (previousPoint.y-point.y)>5) || (previousPoint.y<0 && point.y>0 && (point.y-previousPoint.y)>5)){
+            if((previousPoint.y>0 && point.y<0 && (previousPoint.y-point.y)>1) || (previousPoint.y<0 && point.y>0 && (point.y-previousPoint.y)>1)){
                 [bezierPath moveToPoint:point];
             }else{
                 [bezierPath lineToPoint:point];

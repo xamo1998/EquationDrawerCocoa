@@ -79,23 +79,21 @@ extern NSString * DrawGraphicNotification;
 -(void)zoomOut:(id)sender{
     NSRect current=[modelo funcRect];
     [modelo setFuncRect:NSMakeRect(current.origin.x*2, current.origin.y*2, current.size.width*2, current.size.height*2)];
+    [modelo setHops:[modelo hops]*1.50];
     [preferenceWindow updateXandYValues];
     [chartView setNeedsDisplay:true];
 }
 -(void)zoomIn:(id)sender{
-    /*NSRect current=[modelo funcRect];
+    NSRect current=[modelo funcRect];
     [modelo setFuncRect:NSMakeRect((float)current.origin.x/2, (float)current.origin.y/2, (float)current.size.width/2, (float)current.size.height/2)];
+    [modelo setHops:[modelo hops]/0.75];
     [preferenceWindow updateXandYValues];
-    [chartView setNeedsDisplay:true];*/
+    [chartView setNeedsDisplay:true];
     
     
 }
 -(bool)isGridEnabled{return[modelo grid];}
 -(bool)isTickMarksEnabled{return[modelo tickMarks];}
 -(float)getWidthOfGridLine{return [modelo getWidthOfGridLine];}
--(float)getTextSize{return [modelo getTextSize];}
 -(int)getHops{return [modelo hops];}
--(float)getXOffsetForNumbers{return [modelo getXOffsetForNumbers];}
--(float)getYOffsetForNumbers{return [modelo getYOffsetForNumbers];}
--(float)getStepValue{return [modelo getStepValue];}
 @end

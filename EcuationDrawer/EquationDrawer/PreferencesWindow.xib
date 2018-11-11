@@ -8,6 +8,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PreferencesWindow">
             <connections>
+                <outlet property="_equationComboBox" destination="qzp-SF-v6r" id="6eS-Jw-FES"/>
+                <outlet property="_equationTableView" destination="CYc-sM-Y7c" id="EEC-xB-vT9"/>
                 <outlet property="addGraphicButton" destination="bSU-US-Bjm" id="AEl-eZ-WfT"/>
                 <outlet property="addInterpeterWindow" destination="DDv-We-Xq4" id="W0t-un-dg5"/>
                 <outlet property="allEquationsTableView" destination="ejh-EU-3sU" id="NGP-mh-eB6"/>
@@ -19,8 +21,8 @@
                 <outlet property="drawGraphicButtonInterpeterWindow" destination="OIj-YF-Yg2" id="ISg-cj-7VW"/>
                 <outlet property="drawedEquations" destination="2aU-RM-Bpw" id="LIU-Ar-cD6"/>
                 <outlet property="drawedEquationsInterpeterWindow" destination="DRi-VJ-4Cc" id="oOQ-uA-lF5"/>
-                <outlet property="ecuationComboBox" destination="qzp-SF-v6r" id="6eS-Jw-FES"/>
-                <outlet property="ecuationTableView" destination="CYc-sM-Y7c" id="EEC-xB-vT9"/>
+                <outlet property="equationComboBox" destination="qzp-SF-v6r" id="LWO-FM-vvE"/>
+                <outlet property="equationTableView" destination="CYc-sM-Y7c" id="3mH-eJ-XUH"/>
                 <outlet property="equationTextField" destination="Hkm-c6-DmZ" id="J4p-se-Wla"/>
                 <outlet property="equationsInterpeterWindow" destination="C50-4o-wsU" id="Kcq-pj-tfD"/>
                 <outlet property="fileFormatComboBox" destination="LN7-zT-EQg" id="Ya2-XX-NVi"/>
@@ -66,7 +68,7 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Gráficas predefinidas" identifier="" id="2AD-B7-KdQ">
-                                <view key="view" id="2aY-Xo-nca">
+                                <view key="view" ambiguous="YES" id="2aY-Xo-nca">
                                     <rect key="frame" x="10" y="33" width="768" height="460"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -747,7 +749,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Preferencias  visuales" identifier="" id="PfO-jg-pWu">
-                                <view key="view" ambiguous="YES" id="XrO-yT-L9C">
+                                <view key="view" id="XrO-yT-L9C">
                                     <rect key="frame" x="10" y="33" width="768" height="460"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

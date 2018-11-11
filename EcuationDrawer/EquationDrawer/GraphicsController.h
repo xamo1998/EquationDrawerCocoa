@@ -25,12 +25,8 @@
 -(void)drawPolynomialsInBounds:(NSRect)bounds withGC:(NSGraphicsContext *)context;
 -(float)getWidthOfGraphicsLine;
 -(float)getWidthOfGridLine;
--(float)getTextSize;
 -(bool)isGridEnabled;
 -(bool)isTickMarksEnabled;
--(float)getXOffsetForNumbers;
--(float)getYOffsetForNumbers;
--(float)getStepValue;
 -(int)getHops;
 -(NSColor *)getBackgroundColor;
 @end

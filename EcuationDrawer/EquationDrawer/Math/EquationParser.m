@@ -46,7 +46,7 @@
     for(int i=0; i<[_equationToSolve length]; i++){
         range.length=1;
         range.location=i;
-        if([self isNumber:[_equationToSolve substringWithRange:range]]){
+        /*if([self isNumber:[_equationToSolve substringWithRange:range]]){
             int lastIndexOfNumber= [self getIndexOfRaisedWithFirstValue:i withEquationToSolve:_equationToSolve];
             NSLog(@"LAST INDEX: %d---%d",i, lastIndexOfNumber);
             range.length=lastIndexOfNumber-i;
@@ -55,20 +55,16 @@
             i=lastIndexOfNumber;
             range.location=i;
             range.length=1;
-        }//else{
-            range.location=i;
-            range.length=1;
+        }//else{*/
+            //range.location=i;
+            //range.length=1;
             [_equationSplitted addObject:[_equationToSolve substringWithRange:range]];
             //NSLog(@"2.-INTRODUZCO: %@", [_equationToSolve substringWithRange:range]);
             
         //}
     }
-    NSLog(@"ACABé");
     [self searchOperations];
-    NSLog(@"HOLLL");
-    NSLog([self toString:_equationSplitted]);
     [self giveTermValues];
-    NSLog([self toString:_equationSplitted]);
 }
 
     
@@ -112,12 +108,11 @@
     [operations addObject:[[Operation alloc]initWithOperation:@"abs"]];
     [operations addObject:[[Operation alloc]initWithOperation:@"log"]];
     [operations addObject:[[Operation alloc]initWithOperation:@"ln"]];
-    bool operationFound=NO;
+    
     int counter=0;
     int indexOfOperation=-1;
     NSString * splitValue;
     NSString *letterOfOperation;
-    NSLog([self toString:_equationSplitted]);
     for(int i=0; i<[operations count]; i++){
         while([[self toString:_equationSplitted]containsString:[[operations objectAtIndex:i]splitted]]){
             //NSLog(@"Hay una operacion");
@@ -144,7 +139,6 @@
         }
     }
     
-    NSLog([self toString:_equationSplitted]);
 }
 -(NSMutableString *) toString:(NSMutableArray *)list{
     NSMutableString *string=[NSMutableString string];
@@ -160,48 +154,7 @@
         [_posibleTerms addObject:[NSString stringWithFormat:@"%c",a]];
     }
 }
--(int)getIndexOfRaisedWithFirstValue:(int)i
-                 withEquationToSolve:(NSString *)equationToSolve{
-    int counter=1;
-    NSRange range;
-    range.location=i+1;
-    range.length=1;
-    if([[equationToSolve substringWithRange:range]isEqualTo:@"("])return i+1;
-    if([[equationToSolve substringWithRange:range]isEqualTo:@")"])return i+1;
-    if([[equationToSolve substringWithRange:range]isEqualTo:@"+"])return i+1;
-    if([[equationToSolve substringWithRange:range]isEqualTo:@"-"])return i+1;
-    if([[equationToSolve substringWithRange:range]isEqualTo:@"*"])return i+1;
-    if([[equationToSolve substringWithRange:range]isEqualTo:@"/"])return i+1;
-    if([[equationToSolve substringWithRange:range]isEqualTo:@""])return i+1;
-    
-    if([equationToSolve length]<(i+2)) return i+1;
-    for(int j=i+2; j< [equationToSolve length]; j++){
-        int temp=j;
-        
-        range.location=temp;
-        range.length=1;
-        while(temp<[equationToSolve length] && [self isNumber:[equationToSolve substringWithRange:range]]){
-            temp++;
-            range.location=temp;
-        }
-        return temp;
-    }
-    return -1;
-}
--(bool)isNumber:(NSString *)number{
-    if([number isEqualToString:@"."]) return YES;
-    //double number=[number doubleValue];
-    //NSLog(number);
-    if([number isEqualTo:@"("]) return false;
-    if([number isEqualTo:@")"]) return false;
-    if([number isEqualTo:@"-"]) return false;
-    if([number isEqualTo:@"+"]) return false;
-    if([number isEqualTo:@"*"]) return false;
-    if([number isEqualTo:@"/"]) return false;
-    if([number isEqualTo:@"^"]) return false;
-    if([number isEqualToString:@"e"])return NO;
-    NSScanner *scanner;
-    return [[NSScanner scannerWithString:number] scanDecimal:NULL];
-}
+
+
 
 @end

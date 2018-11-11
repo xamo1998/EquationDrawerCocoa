@@ -18,14 +18,14 @@
     NSNotificationCenter *notificationCenter;
     NSMutableArray *termValues, *termsValuesInterpeterWindow;
     IBOutlet NSSlider *widthSlider;
-    IBOutlet NSComboBox *ecuationComboBox, *fileFormatComboBox;
-    IBOutlet NSButtonCell *grid, *numbers, *tickNumbers;
+    IBOutlet NSComboBox *equationComboBox, *fileFormatComboBox;
+    IBOutlet NSButtonCell *grid, *tickNumbers;
     IBOutlet NSTextField *nameTextField, *counterInterpeterWindow, *equationTextField, *nameTextFieldInterpeterWindow, *nameTextFieldPreferences;
     IBOutlet NSTextField *xStart, *yStart, *xEnd, *yEnd;
     IBOutlet NSButton *addGraphicButton,*removeGraphicButton,*drawGraphicButton, *moveToRight, *moveToLeft, *addInterpeterWindow,*removeGraphicButtonInterpeterWindow,*drawGraphicButtonInterpeterWindow,
         *moveToRightInterpeterWindow, *moveToLeftInterpeterWindow;
     IBOutlet NSColorWell *colorWell, *colorWellInterpeterWindow, *backgroundColor, *functionColorWell;
-    IBOutlet NSTableView *ecuationTableView,*paramsTableView, *drawedEquations, *paramsInterpeterWindow, *equationsInterpeterWindow,*drawedEquationsInterpeterWindow,
+    IBOutlet NSTableView *equationTableView,*paramsTableView, *drawedEquations, *paramsInterpeterWindow, *equationsInterpeterWindow,*drawedEquationsInterpeterWindow,
                                                       *allEquationsTableView;
                                                       
 }

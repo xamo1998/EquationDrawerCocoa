@@ -19,10 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property NSPoint startDraggedPoint, endDraggedPoint;
 @property NSPoint finalStartDraggedPoint, finalEndDraggedPoint;
 -(void)drawAxisWithGrid:(bool)grid
-          withTickMarks:(bool)tickMarks
-          withStepValue:(float)stepValue;
--(void)drawGrid:(float)stepValue
-   withMaxPoint:(NSPoint)maxPoint;
+          withTickMarks:(bool)tickMarks;
+-(void)drawGrid;
 -(void)drawNumbers;
 -(void)drawTickMarks;
 -(NSImage *)imageRepresentation;

@@ -20,8 +20,5 @@
 -(void)giveTermValues;
 -(void)searchOperations;
 -(void)createListOfPosibleTerms;
--(int)getIndexOfRaisedWithFirstValue:(int)i
-                 withEquationToSolve:(NSString *)equationToSolve;
--(bool)isNumber:(NSString *)number;
 
 @end

@@ -10,8 +10,8 @@
 
 @implementation Model
 @class EquationData;
-@synthesize ecuationData;
-@synthesize ecuations;
+@synthesize equationData;
+@synthesize equations;
 -(id)init{
     self=[super init];
     if(!self){
@@ -23,22 +23,22 @@
     self.grid=true;
     self.tickMarks=true;
     self.funcRect=NSMakeRect(-100,-100,200,200);
-    ecuationData=[[NSMutableArray alloc]init];
+    equationData=[[NSMutableArray alloc]init];
     _drawedEquations=[[NSMutableArray alloc]init];
-    ecuations=[[NSMutableArray alloc]init];
+    equations=[[NSMutableArray alloc]init];
     [self createTitleOfEcuations];
     return self;
 }
 
 -(void)createTitleOfEcuations{
-    [ecuationData addObject:[[EquationData alloc]initWithName:@"a*sen(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
-    EquationData *data =[ecuationData objectAtIndex:0];
+    [equationData addObject:[[EquationData alloc]initWithName:@"a*sen(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
+    EquationData *data =[equationData objectAtIndex:0];
     //NSLog(@"LIST: %@",[data terms]);
-    [ecuationData addObject:[[EquationData alloc]initWithName:@"a*cos(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
-    [ecuationData addObject:[[EquationData alloc]initWithName:@"a*x^n" withTerms:[self getArrayOfTerms:@"a",@"n",nil]]];
-    [ecuationData addObject:[[EquationData alloc]initWithName:@"a*x+b" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
-    [ecuationData addObject:[[EquationData alloc]initWithName:@"a*x^2+b*x+c" withTerms:[self getArrayOfTerms:@"a",@"b",@"c",nil]]];
-    [ecuationData addObject:[[EquationData alloc]initWithName:@"a/(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
+    [equationData addObject:[[EquationData alloc]initWithName:@"a*cos(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
+    [equationData addObject:[[EquationData alloc]initWithName:@"a*x^n" withTerms:[self getArrayOfTerms:@"a",@"n",nil]]];
+    [equationData addObject:[[EquationData alloc]initWithName:@"a*x+b" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
+    [equationData addObject:[[EquationData alloc]initWithName:@"a*x^2+b*x+c" withTerms:[self getArrayOfTerms:@"a",@"b",@"c",nil]]];
+    [equationData addObject:[[EquationData alloc]initWithName:@"a/(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
 
 }
 -(NSMutableArray *)getArrayOfTerms:(id)terms,...{
@@ -59,15 +59,5 @@
 
 -(float)getWidthOfGraphicsLine{return (float)(_lineWidth);}
 -(float)getWidthOfGridLine{return (float)(0.3);}
--(float)getXOffsetForNumbers{return (float)(1.0);}
--(float)getYOffsetForNumbers{return (float)(9.0);}
--(float)getStepValue{return (float)(8.0);}
-/*
--(float)getWidthOfGraphicsLine{return (float)(self.funcRect.size.height*_lineWidth)/200;}
--(float)getWidthOfGridLine{return (float)(self.funcRect.size.height*0.3)/200;}
--(float)getTextSize{return (float)(self.funcRect.size.height*3.5)/200;}
--(float)getXOffsetForNumbers{return (float)(self.funcRect.size.height*1)/200;}
--(float)getYOffsetForNumbers{return (float)(self.funcRect.size.height*9)/200;}
--(float)getStepValue{return (float)(self.funcRect.size.height/8);}*/
 
 @end

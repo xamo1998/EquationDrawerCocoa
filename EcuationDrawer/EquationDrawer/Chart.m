@@ -20,7 +20,7 @@
     
     [[NSBezierPath bezierPathWithRect:NSMakeRect(_startDraggedPoint.x, _startDraggedPoint.y, _endDraggedPoint.x-_startDraggedPoint.x, _endDraggedPoint.y-_startDraggedPoint.y)]fill];
     
-    [self drawAxisWithGrid:[graphicsController isGridEnabled] withTickMarks:[graphicsController isTickMarksEnabled] withStepValue:1];
+    [self drawAxisWithGrid:[graphicsController isGridEnabled] withTickMarks:[graphicsController isTickMarksEnabled]];
     
     NSRect bounds =[self bounds];
     NSGraphicsContext *context = [NSGraphicsContext currentContext];
@@ -124,7 +124,7 @@
 }
 
 //Drawing methods
--(void)drawAxisWithGrid:(bool)grid withTickMarks:(bool)tickMarks withStepValue:(float)stepValue{
+-(void)drawAxisWithGrid:(bool)grid withTickMarks:(bool)tickMarks{
     NSRect funcRect=[graphicsController getFuncRect];
     float maxHeight=funcRect.size.height;
     float maxWidth=funcRect.size.width;
@@ -141,7 +141,7 @@
     
     
     if(grid)
-        [self drawGrid:[graphicsController getStepValue] withMaxPoint:maxPoint];
+        [self drawGrid];
     if(tickMarks)
         [self drawTickMarks];
   
@@ -285,7 +285,7 @@
     
 }
 
--(void)drawGrid:(float)stepValue withMaxPoint:(NSPoint)maxPoint{
+-(void)drawGrid{
     NSRect rectX, rectY;
     NSBezierPath *pathY, *pathX;
     int contadorDarkGrey=0;
