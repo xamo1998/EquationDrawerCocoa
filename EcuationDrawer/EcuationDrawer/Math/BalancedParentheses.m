@@ -14,18 +14,14 @@
 -(bool)areParenthesesBalanced:(NSMutableArray *)exp{
     Stack *stack= [[Stack alloc]init];
     for(int i=0;i<[exp count];i++){
-        NSLog(@"DDDD:%@",[exp objectAtIndex:i]);
         if([[exp objectAtIndex:i] isEqualToString:@"("]){
-            NSLog(@"aaaaaa");
            [stack pushObject:[exp objectAtIndex:i]];
         }if([[exp objectAtIndex:i]isEqualToString:@")"]){
-            NSLog(@"bbbbbbbb");
             if([stack count]==0) return false;
             else
                 if(![self isMatchingPairWithChar1:[stack popObject] withChar2:[exp objectAtIndex:i]]) return false;
         }
     }
-    NSLog(@"COUNT: %ld",[stack count]);
     if([stack count]==0) return true;
     else return false;
 }

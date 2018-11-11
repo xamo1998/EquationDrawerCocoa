@@ -32,7 +32,7 @@
     [pathX fill];
     [pathY fill];*/
 }
-
+//Mouse Events
 -(void)mouseDown:(NSEvent *)event{
     _startDraggedPoint=[event locationInWindow];
     NSRect funcRect=[graphicsController getFuncRect];
@@ -80,22 +80,6 @@
     zoomIn.hidden=true;
     zoomOut.hidden=true;
 }
--(NSImage *)imageRepresentation{
-    NSSize mySize= self.bounds.size;
-    NSSize imgSize= NSMakeSize(mySize.width, mySize.height);
-    NSBitmapImageRep *bir=[self bitmapImageRepForCachingDisplayInRect:[self bounds]];
-    [bir setSize:imgSize];
-    [self cacheDisplayInRect:[self bounds] toBitmapImageRep:bir];
-    NSImage * image =[[NSImage alloc]initWithSize:imgSize];
-    [image addRepresentation:bir];
-    return image;
-    //return [[NSImage alloc]initWithData:[self dataWithPDFInsideRect:[self bounds]]];
-    /*[image lockFocus];
-    CGContextRef ctx=[NSGraphicsContext currentContext].graphicsPort;
-    [self.layer renderInContext:ctx];
-    [image unlockFocus];
-    return image;*/
-}
 
 -(void)mouseMoved:(NSEvent *)event{
     //NSLog(@"AAA");
@@ -138,6 +122,8 @@
             
     }
 }
+
+//Drawing methods
 -(void)drawAxisWithGrid:(bool)grid withNumbers:(bool)numbers withTickMarks:(bool)tickMarks withStepValue:(float)stepValue{
     NSRect funcRect=[graphicsController getFuncRect];
     float maxHeight=funcRect.size.height;

@@ -39,45 +39,8 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
 }
 
 //Button Listeners
-
 -(void)drawGraphic:(id)sender{
-    
     [notificationCenter postNotificationName:DrawGraphicNotification object:self];
-    
-}
--(void)nameVisualPreferenceEditTextListener:(id)sender{
-    if([allEquationsTableView selectedRow]>=0){
-        Ecuation *equation;
-        if((int)[allEquationsTableView selectedRow]>((int)[[modelo ecuations]count]-1)){
-            equation=[[modelo drawedEquations]objectAtIndex: [allEquationsTableView selectedRow]-[[modelo ecuations]count]];
-        }else{
-            equation=[[modelo ecuations]objectAtIndex:[allEquationsTableView selectedRow]];
-        }
-        [equation setName:[sender stringValue]];
-        [ecuationTableView reloadData];
-        [drawedEquations reloadData];
-        [drawedEquationsInterpeterWindow reloadData];
-        [equationsInterpeterWindow reloadData];
-        [allEquationsTableView reloadData];
-    }
-}
--(void)widthSliderListener:(id)sender{
-    bool isDrawed=false;
-    if([allEquationsTableView selectedRow]>=0){
-        Ecuation *equation;
-        if((int)[allEquationsTableView selectedRow]>((int)[[modelo ecuations]count]-1)){
-            equation=[[modelo drawedEquations]objectAtIndex: [allEquationsTableView selectedRow]-[[modelo ecuations]count]];
-            isDrawed=true;
-        }else{
-            isDrawed=false;
-            equation=[[modelo ecuations]objectAtIndex:[allEquationsTableView selectedRow]];
-        }
-        [equation setLineWidth:[sender floatValue]];
-        if(isDrawed)
-            [notificationCenter postNotificationName:DrawGraphicNotification object:self]; //Improve solo si está dibujada
-    }
-    
-    
 }
 
 -(void)removeGraphic:(id)sender{
@@ -156,34 +119,60 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     [ecuationTableView reloadData];
     
 }
-
--(NSColor *)getRandomColor{
-    float red, blue, green;
-    red=random()%128/128.0;
-    blue=random()%128/128.0;
-    green=random()%128/128.0;
-    return [NSColor colorWithSRGBRed:red green:green blue:blue alpha:1.0];
-}
-//TableView Methods...
-
--(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView{
-    if(tableView==paramsTableView){
-        NSInteger index=[ecuationComboBox indexOfSelectedItem];
-        if(index>=0){
-            return[[[modelo ecuationData]objectAtIndex:index]termCount];
-        }
+- (void)sendToLeft:(id)sender{
+    NSInteger row;
+    if(sender==moveToLeftInterpeterWindow)
+        row=[drawedEquationsInterpeterWindow selectedRow];
+    else
+        row=[drawedEquations selectedRow];
+    [[modelo ecuations]addObject:[[modelo drawedEquations]objectAtIndex:row]];
+    [[modelo drawedEquations]removeObjectAtIndex:row];
+    [ecuationTableView reloadData];
+    [equationsInterpeterWindow reloadData];
+    [drawedEquationsInterpeterWindow reloadData];
+    [drawedEquations reloadData];
+    if([[modelo drawedEquations]count]==0){
+        //NSLog(@"Hay %d elementos...",[[modelo drawedEquations]count]);
+        [drawGraphicButton setEnabled:false];
+        [drawGraphicButtonInterpeterWindow setEnabled:false];
     }
-    NSLog(@"ADDED11");
-    if(tableView==paramsInterpeterWindow)
-        return [counterInterpeterWindow integerValue];
-    NSLog(@"ADDED22");
-    if(tableView==ecuationTableView || tableView==equationsInterpeterWindow)return[[modelo ecuations]count];
-    NSLog(@"ADDED33");
-    if(tableView==drawedEquations || tableView==drawedEquationsInterpeterWindow)return[[modelo drawedEquations]count];
-    if(tableView==allEquationsTableView) return[[modelo ecuations]count]+[[modelo drawedEquations]count];
-    return 0;
+    [notificationCenter postNotificationName:DrawGraphicNotification object:self];
+}
+- (void)sendToRight:(id)sender{
+    NSInteger row;
+    if(sender==moveToRightInterpeterWindow)
+        row=[equationsInterpeterWindow selectedRow];
+    else
+        row=[ecuationTableView selectedRow];
+    [[modelo drawedEquations]addObject:[[modelo ecuations]objectAtIndex:row]];
+    [[modelo ecuations]removeObjectAtIndex:row];
+    [ecuationTableView reloadData];
+    [drawedEquations reloadData];
+    [equationsInterpeterWindow reloadData];
+    [drawedEquationsInterpeterWindow reloadData];
+    [drawGraphicButton setEnabled:true];
+    [drawGraphicButtonInterpeterWindow setEnabled:true];
 }
 
+
+
+//TextField listeners
+-(void)nameVisualPreferenceEditTextListener:(id)sender{
+    if([allEquationsTableView selectedRow]>=0){
+        Ecuation *equation;
+        if((int)[allEquationsTableView selectedRow]>((int)[[modelo ecuations]count]-1)){
+            equation=[[modelo drawedEquations]objectAtIndex: [allEquationsTableView selectedRow]-[[modelo ecuations]count]];
+        }else{
+            equation=[[modelo ecuations]objectAtIndex:[allEquationsTableView selectedRow]];
+        }
+        [equation setName:[sender stringValue]];
+        [ecuationTableView reloadData];
+        [drawedEquations reloadData];
+        [drawedEquationsInterpeterWindow reloadData];
+        [equationsInterpeterWindow reloadData];
+        [allEquationsTableView reloadData];
+    }
+}
 - (void)representationValueListener:(id)sender{
     if([[xEnd stringValue]length] > 0 && [[yEnd stringValue]length] > 0 && [[xStart stringValue]length] > 0 && [[yStart stringValue]length] > 0){
         float width, height;
@@ -201,6 +190,167 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     }
     [sender deselectAllCells];
 }
+-(void)customParamsEditTextListener:(id)sender{
+    if([counterInterpeterWindow integerValue]>=0 && [counterInterpeterWindow integerValue]<15){
+        //NSLog(@"VALOR: %d",[counterInterpeterWindow integerValue]);
+        [termsValuesInterpeterWindow removeAllObjects];
+        for(int i=0; i<[counterInterpeterWindow integerValue]; i++){
+            [termsValuesInterpeterWindow addObject:@""];
+        }
+        [equationTextField setStringValue:@""];
+        if([counterInterpeterWindow integerValue]==0)
+            [equationTextField setEnabled:true];
+        else
+            [equationTextField setEnabled:false];
+        [paramsInterpeterWindow reloadData];
+    }else{
+        NSRect textFieldFrame = [counterInterpeterWindow frame];
+        CGFloat centerX=textFieldFrame.origin.x;
+        CGFloat centerY=textFieldFrame.origin.y;
+        //NSPoint origin = NSMakePoint(centerX, centerY);
+        //NSPoint one = NSMakePoint(centerX-5, centerY);
+        //NSPoint two = NSMakePoint(centerX+5, centerY);
+        if([counterInterpeterWindow frame].origin.x==centerX)
+            [self animateTextField:counterInterpeterWindow];
+        
+    }
+    
+}
+-(void)controlTextDidChange:(NSNotification *)obj{
+    //NSLog(@"FDF");
+    if([obj object]==equationTextField){
+        NSInteger length=[[equationTextField stringValue]length];
+        NSRange range;
+        for(int i=0; i<[[equationTextField stringValue]length];i++){
+            range.length=1;
+            range.location=i;
+            if([[[equationTextField stringValue]substringWithRange:range]floatValue]!=0 || [[[equationTextField stringValue]substringWithRange:range]isEqualToString:@"0"]){
+                NSString *begin, *end;
+                begin=[[equationTextField stringValue]substringToIndex:i];
+                end=[[equationTextField stringValue]substringFromIndex:i+1];
+                [equationTextField setStringValue: [NSString stringWithFormat:@"%@%@",begin,end]];
+            }
+        }
+        if([[equationTextField stringValue]length]==0){
+            [addInterpeterWindow setEnabled:false];
+            return;
+        }
+        if([self checkCorrectEquation] && [[nameTextFieldInterpeterWindow stringValue]length]>0){
+            [addInterpeterWindow setEnabled:true];
+        }else{
+            [addInterpeterWindow setEnabled:false];
+        }
+    }else if([obj object]==nameTextFieldInterpeterWindow){
+        if([self checkCorrectEquation] && [[nameTextFieldInterpeterWindow stringValue]length]>0){
+            [addInterpeterWindow setEnabled:true];
+        }else{
+            [addInterpeterWindow setEnabled:false];
+        }
+        if([counterInterpeterWindow integerValue]==0)
+            [equationTextField setEnabled:true];
+        //else
+         //   [equationTextField setEnabled:false];
+    }else
+        [self checkCorrectGraphic];
+}
+
+
+//Slider listeners
+-(void)widthSliderListener:(id)sender{
+    bool isDrawed=false;
+    if([allEquationsTableView selectedRow]>=0){
+        Ecuation *equation;
+        if((int)[allEquationsTableView selectedRow]>((int)[[modelo ecuations]count]-1)){
+            equation=[[modelo drawedEquations]objectAtIndex: [allEquationsTableView selectedRow]-[[modelo ecuations]count]];
+            isDrawed=true;
+        }else{
+            isDrawed=false;
+            equation=[[modelo ecuations]objectAtIndex:[allEquationsTableView selectedRow]];
+        }
+        [equation setLineWidth:[sender floatValue]];
+        if(isDrawed)
+            [notificationCenter postNotificationName:DrawGraphicNotification object:self]; //Improve solo si está dibujada
+    }
+    
+    
+}
+-(void)qualitySliderListener:(id)sender{
+    switch ([sender integerValue]) {
+        case 0:
+            [modelo setHops:300];
+            break;
+        case 1:
+            [modelo setHops:4000];
+            break;
+        case 2:
+            [modelo setHops:14000];
+            break;
+    }
+    [notificationCenter postNotificationName:DrawGraphicNotification object:self];
+}
+
+
+
+
+//Others
+-(void)exportImage:(id)sender{
+    [notificationCenter postNotificationName:ReloadImageViewNotification object:self];
+    NSView *view=_currentView;
+    NSBitmapImageRep *rep=[view bitmapImageRepForCachingDisplayInRect:[view bounds]];
+    [view cacheDisplayInRect:[view bounds] toBitmapImageRep:rep];
+    NSSavePanel *savePanel=[[NSSavePanel alloc]init];
+    NSData *data;
+    NSDate *date=[NSDate date];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+    [dateFormat setDateFormat:@"yyyy-MM-dd-HH.mm.SS"];
+    if([[fileFormatComboBox stringValue]containsString:@"(.png)"]){
+        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.png",[dateFormat stringFromDate:date]]];
+        data=[rep representationUsingType:NSPNGFileType properties:nil];
+    }else if([[fileFormatComboBox stringValue]containsString:@"(.gif)"]){
+        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.gif",[dateFormat stringFromDate:date]]];
+        data=[rep representationUsingType:NSGIFFileType properties:nil];
+    }else if([[fileFormatComboBox stringValue]containsString:@"(.jpeg)"]){
+        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.jpeg",[dateFormat stringFromDate:date]]];
+        data=[rep representationUsingType:NSJPEGFileType properties:nil];
+    }else if([[fileFormatComboBox stringValue]containsString:@"(.bmp)"]){
+        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.bmp",[dateFormat stringFromDate:date]]];
+        data=[rep representationUsingType:NSBMPFileType properties:nil];
+    }else if([[fileFormatComboBox stringValue]containsString:@"(.jp2)"]){
+        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.jp2",[dateFormat stringFromDate:date]]];
+        data=[rep representationUsingType:NSJPEG2000FileType properties:nil];
+    }
+    [savePanel setCanCreateDirectories:true];
+    [savePanel setPrompt:@"Guardar"];
+    [savePanel beginWithCompletionHandler:^(NSInteger result){
+        if(result==NSFileHandlingPanelOKButton){
+            NSFileManager *manager = [NSFileManager defaultManager];
+            NSURL *saveURL=[savePanel URL];
+            //NSData *data =[rep representationUsingType:NSPNGFileType properties:nil];
+            [data writeToURL:saveURL atomically:true];
+        }
+    }];
+    
+   
+}
+-(NSColor *)getRandomColor{
+    float red, blue, green;
+    red=random()%128/128.0;
+    blue=random()%128/128.0;
+    green=random()%128/128.0;
+    return [NSColor colorWithSRGBRed:red green:green blue:blue alpha:1.0];
+}
+-(void)updateXandYValues{
+    NSRect rect=[modelo funcRect];
+    //if([xStart floatValue]>=[xEnd floatValue])
+      //  [self animateTextField:xEnd];
+    
+        
+    [xStart setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.x]];
+    [yStart setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.y]];
+    [xEnd setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.x+rect.size.width]];
+    [yEnd setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.y+rect.size.height]];
+}
+
 -(void)recalculateWidths{
     NSMutableArray *equations, *drawed;
     equations=[modelo ecuations];
@@ -284,43 +434,7 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     [[textField animator] setFrameOrigin:one];
     [NSAnimationContext endGrouping];
 }
--(void)customParamsEditTextListener:(id)sender{
-    if([counterInterpeterWindow integerValue]>=0 && [counterInterpeterWindow integerValue]<15){
-        //NSLog(@"VALOR: %d",[counterInterpeterWindow integerValue]);
-        [termsValuesInterpeterWindow removeAllObjects];
-        for(int i=0; i<[counterInterpeterWindow integerValue]; i++){
-            [termsValuesInterpeterWindow addObject:@""];
-        }
-        [equationTextField setStringValue:@""];
-        if([counterInterpeterWindow integerValue]==0)
-            [equationTextField setEnabled:true];
-        else
-            [equationTextField setEnabled:false];
-        [paramsInterpeterWindow reloadData];
-    }else{
-        NSRect textFieldFrame = [counterInterpeterWindow frame];
-        CGFloat centerX=textFieldFrame.origin.x;
-        CGFloat centerY=textFieldFrame.origin.y;
-        //NSPoint origin = NSMakePoint(centerX, centerY);
-        //NSPoint one = NSMakePoint(centerX-5, centerY);
-        //NSPoint two = NSMakePoint(centerX+5, centerY);
-        if([counterInterpeterWindow frame].origin.x==centerX)
-            [self animateTextField:counterInterpeterWindow];
-        
-    }
-    
-}
--(void)updateXandYValues{
-    NSRect rect=[modelo funcRect];
-    //if([xStart floatValue]>=[xEnd floatValue])
-      //  [self animateTextField:xEnd];
-    
-        
-    [xStart setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.x]];
-    [yStart setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.y]];
-    [xEnd setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.x+rect.size.width]];
-    [yEnd setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.y+rect.size.height]];
-}
+
 -(void)visualPropertyListener:(id)sender{
     
     //NSLog(@"%@",[sender object]);
@@ -334,6 +448,28 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     //NSLog(@"GRID:%",[grid isEnabled]);
     [notificationCenter postNotificationName:DrawGraphicNotification object:self];
 }
+
+
+
+//TableView Methods...
+-(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView{
+    if(tableView==paramsTableView){
+        NSInteger index=[ecuationComboBox indexOfSelectedItem];
+        if(index>=0){
+            return[[[modelo ecuationData]objectAtIndex:index]termCount];
+        }
+    }
+    NSLog(@"ADDED11");
+    if(tableView==paramsInterpeterWindow)
+        return [counterInterpeterWindow integerValue];
+    NSLog(@"ADDED22");
+    if(tableView==ecuationTableView || tableView==equationsInterpeterWindow)return[[modelo ecuations]count];
+    NSLog(@"ADDED33");
+    if(tableView==drawedEquations || tableView==drawedEquationsInterpeterWindow)return[[modelo drawedEquations]count];
+    if(tableView==allEquationsTableView) return[[modelo ecuations]count]+[[modelo drawedEquations]count];
+    return 0;
+}
+
 -(void)tableViewSelectionDidChange:(NSNotification *)notification{
     if([notification object]==ecuationTableView){
         if([ecuationTableView selectedRow]<0){
@@ -425,65 +561,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
         }
     }
 }
--(void)changeColorListener:(id)sender{
-    if(sender==backgroundColor){
-        [modelo setBackgroundColor:[backgroundColor color]];
-        [notificationCenter postNotificationName:DrawGraphicNotification object:self];
-        return;
-    }
-    Ecuation *equation;
-    bool isDrawed=false;
-    if([allEquationsTableView selectedRow]>(int)[[modelo ecuations]count]-1){
-        isDrawed=true;
-        equation=[[modelo drawedEquations]objectAtIndex: [allEquationsTableView selectedRow]-[[modelo ecuations]count]];
-    }else{
-        equation=[[modelo ecuations]objectAtIndex:[allEquationsTableView selectedRow]];
-    }
-    [equation setColor:[functionColorWell color]];
-    [ecuationTableView reloadData];
-    [equationsInterpeterWindow reloadData];
-    [drawedEquations reloadData];
-    [drawedEquationsInterpeterWindow reloadData];
-    [allEquationsTableView reloadData];
-    if(isDrawed)
-        [notificationCenter postNotificationName:DrawGraphicNotification object:self];
-}
-
-- (void)sendToLeft:(id)sender{
-    NSInteger row;
-    if(sender==moveToLeftInterpeterWindow)
-        row=[drawedEquationsInterpeterWindow selectedRow];
-    else
-        row=[drawedEquations selectedRow];
-    [[modelo ecuations]addObject:[[modelo drawedEquations]objectAtIndex:row]];
-    [[modelo drawedEquations]removeObjectAtIndex:row];
-    [ecuationTableView reloadData];
-    [equationsInterpeterWindow reloadData];
-    [drawedEquationsInterpeterWindow reloadData];
-    [drawedEquations reloadData];
-    if([[modelo drawedEquations]count]==0){
-        //NSLog(@"Hay %d elementos...",[[modelo drawedEquations]count]);
-        [drawGraphicButton setEnabled:false];
-        [drawGraphicButtonInterpeterWindow setEnabled:false];
-    }
-    [notificationCenter postNotificationName:DrawGraphicNotification object:self];
-}
-- (void)sendToRight:(id)sender{
-    NSInteger row;
-    if(sender==moveToRightInterpeterWindow)
-        row=[equationsInterpeterWindow selectedRow];
-    else
-        row=[ecuationTableView selectedRow];
-    [[modelo drawedEquations]addObject:[[modelo ecuations]objectAtIndex:row]];
-    [[modelo ecuations]removeObjectAtIndex:row];
-    [ecuationTableView reloadData];
-    [drawedEquations reloadData];
-    [equationsInterpeterWindow reloadData];
-    [drawedEquationsInterpeterWindow reloadData];
-    [drawGraphicButton setEnabled:true];
-    [drawGraphicButtonInterpeterWindow setEnabled:true];
-}
-
 -(void)tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
     if(tableView==ecuationTableView || tableView==equationsInterpeterWindow){
         if([[tableView tableColumns]indexOfObject:tableColumn]==2){
@@ -607,84 +684,34 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     
 }
 
-//Checks...
--(void)exportImage:(id)sender{
-    [notificationCenter postNotificationName:ReloadImageViewNotification object:self];
-    NSView *view=_currentView;
-    NSBitmapImageRep *rep=[view bitmapImageRepForCachingDisplayInRect:[view bounds]];
-    [view cacheDisplayInRect:[view bounds] toBitmapImageRep:rep];
-    NSSavePanel *savePanel=[[NSSavePanel alloc]init];
-    NSData *data;
-    NSDate *date=[NSDate date];
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd-HH.mm.SS"];
-    if([[fileFormatComboBox stringValue]containsString:@"(.png)"]){
-        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.png",[dateFormat stringFromDate:date]]];
-        data=[rep representationUsingType:NSPNGFileType properties:nil];
-    }else if([[fileFormatComboBox stringValue]containsString:@"(.gif)"]){
-        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.gif",[dateFormat stringFromDate:date]]];
-        data=[rep representationUsingType:NSGIFFileType properties:nil];
-    }else if([[fileFormatComboBox stringValue]containsString:@"(.jpeg)"]){
-        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.jpeg",[dateFormat stringFromDate:date]]];
-        data=[rep representationUsingType:NSJPEGFileType properties:nil];
-    }else if([[fileFormatComboBox stringValue]containsString:@"(.bmp)"]){
-        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.bmp",[dateFormat stringFromDate:date]]];
-        data=[rep representationUsingType:NSBMPFileType properties:nil];
-    }else if([[fileFormatComboBox stringValue]containsString:@"(.jp2)"]){
-        [savePanel setNameFieldStringValue:[NSString stringWithFormat:@"Grafica_%@_.jp2",[dateFormat stringFromDate:date]]];
-        data=[rep representationUsingType:NSJPEG2000FileType properties:nil];
+
+
+//Color Well Listeners
+-(void)changeColorListener:(id)sender{
+    if(sender==backgroundColor){
+        [modelo setBackgroundColor:[backgroundColor color]];
+        [notificationCenter postNotificationName:DrawGraphicNotification object:self];
+        return;
     }
-    [savePanel setCanCreateDirectories:true];
-    [savePanel setPrompt:@"Guardar"];
-    [savePanel beginWithCompletionHandler:^(NSInteger result){
-        if(result==NSFileHandlingPanelOKButton){
-            NSFileManager *manager = [NSFileManager defaultManager];
-            NSURL *saveURL=[savePanel URL];
-            //NSData *data =[rep representationUsingType:NSPNGFileType properties:nil];
-            [data writeToURL:saveURL atomically:true];
-        }
-    }];
-    
-   
-}
--(void)controlTextDidChange:(NSNotification *)obj{
-    //NSLog(@"FDF");
-    if([obj object]==equationTextField){
-        NSInteger length=[[equationTextField stringValue]length];
-        NSRange range;
-        for(int i=0; i<[[equationTextField stringValue]length];i++){
-            range.length=1;
-            range.location=i;
-            if([[[equationTextField stringValue]substringWithRange:range]floatValue]!=0 || [[[equationTextField stringValue]substringWithRange:range]isEqualToString:@"0"]){
-                NSString *begin, *end;
-                begin=[[equationTextField stringValue]substringToIndex:i];
-                end=[[equationTextField stringValue]substringFromIndex:i+1];
-                [equationTextField setStringValue: [NSString stringWithFormat:@"%@%@",begin,end]];
-            }
-        }
-        if([[equationTextField stringValue]length]==0){
-            [addInterpeterWindow setEnabled:false];
-            return;
-        }
-        if([self checkCorrectEquation] && [[nameTextFieldInterpeterWindow stringValue]length]>0){
-            [addInterpeterWindow setEnabled:true];
-        }else{
-            [addInterpeterWindow setEnabled:false];
-        }
-    }else if([obj object]==nameTextFieldInterpeterWindow){
-        if([self checkCorrectEquation] && [[nameTextFieldInterpeterWindow stringValue]length]>0){
-            [addInterpeterWindow setEnabled:true];
-        }else{
-            [addInterpeterWindow setEnabled:false];
-        }
-        if([counterInterpeterWindow integerValue]==0)
-            [equationTextField setEnabled:true];
-        //else
-         //   [equationTextField setEnabled:false];
-    }else
-        [self checkCorrectGraphic];
+    Ecuation *equation;
+    bool isDrawed=false;
+    if([allEquationsTableView selectedRow]>(int)[[modelo ecuations]count]-1){
+        isDrawed=true;
+        equation=[[modelo drawedEquations]objectAtIndex: [allEquationsTableView selectedRow]-[[modelo ecuations]count]];
+    }else{
+        equation=[[modelo ecuations]objectAtIndex:[allEquationsTableView selectedRow]];
+    }
+    [equation setColor:[functionColorWell color]];
+    [ecuationTableView reloadData];
+    [equationsInterpeterWindow reloadData];
+    [drawedEquations reloadData];
+    [drawedEquationsInterpeterWindow reloadData];
+    [allEquationsTableView reloadData];
+    if(isDrawed)
+        [notificationCenter postNotificationName:DrawGraphicNotification object:self];
 }
 
+//Checks
 -(bool)checkCorrectEquation{
     if([[equationTextField stringValue]length]==0) return false;
     
@@ -734,20 +761,7 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     
 }
 
--(void)qualitySliderListener:(id)sender{
-    switch ([sender integerValue]) {
-        case 0:
-            [modelo setHops:300];
-            break;
-        case 1:
-            [modelo setHops:4000];
-            break;
-        case 2:
-            [modelo setHops:14000];
-            break;
-    }
-    [notificationCenter postNotificationName:DrawGraphicNotification object:self];
-}
+
 //ComboBox Methods...
 -(void)comboBoxSelectionDidChange:(NSNotification *)notification{
     NSInteger index=[ecuationComboBox indexOfSelectedItem];
@@ -760,8 +774,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
         [self checkCorrectGraphic];
     }
 }
-
-
 
 -(NSInteger)numberOfItemsInComboBox:(NSComboBox *)comboBox{
     return [[modelo ecuationData]count];
