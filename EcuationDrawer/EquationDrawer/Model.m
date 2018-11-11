@@ -6,10 +6,10 @@
 //  Copyright © 2018 xamo. All rights reserved.
 //
 
-#import "Modelo.h"
+#import "Model.h"
 
-@implementation Modelo
-@class EcuationData;
+@implementation Model
+@class EquationData;
 @synthesize ecuationData;
 @synthesize ecuations;
 -(id)init{
@@ -21,7 +21,6 @@
     self.hops=4000;
     self.lineWidth=0.6;
     self.grid=true;
-    self.numbers=true;
     self.tickMarks=true;
     self.funcRect=NSMakeRect(-100,-100,200,200);
     ecuationData=[[NSMutableArray alloc]init];
@@ -32,14 +31,14 @@
 }
 
 -(void)createTitleOfEcuations{
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a*sen(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
-    EcuationData *data =[ecuationData objectAtIndex:0];
+    [ecuationData addObject:[[EquationData alloc]initWithName:@"a*sen(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
+    EquationData *data =[ecuationData objectAtIndex:0];
     //NSLog(@"LIST: %@",[data terms]);
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a*cos(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a*x^n" withTerms:[self getArrayOfTerms:@"a",@"n",nil]]];
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a*x+b" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a*x^2+b*x+c" withTerms:[self getArrayOfTerms:@"a",@"b",@"c",nil]]];
-    [ecuationData addObject:[[EcuationData alloc]initWithName:@"a/(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
+    [ecuationData addObject:[[EquationData alloc]initWithName:@"a*cos(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
+    [ecuationData addObject:[[EquationData alloc]initWithName:@"a*x^n" withTerms:[self getArrayOfTerms:@"a",@"n",nil]]];
+    [ecuationData addObject:[[EquationData alloc]initWithName:@"a*x+b" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
+    [ecuationData addObject:[[EquationData alloc]initWithName:@"a*x^2+b*x+c" withTerms:[self getArrayOfTerms:@"a",@"b",@"c",nil]]];
+    [ecuationData addObject:[[EquationData alloc]initWithName:@"a/(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
 
 }
 -(NSMutableArray *)getArrayOfTerms:(id)terms,...{
@@ -60,7 +59,6 @@
 
 -(float)getWidthOfGraphicsLine{return (float)(_lineWidth);}
 -(float)getWidthOfGridLine{return (float)(0.3);}
--(float)getTextSize{return (float)(3.5);}
 -(float)getXOffsetForNumbers{return (float)(1.0);}
 -(float)getYOffsetForNumbers{return (float)(9.0);}
 -(float)getStepValue{return (float)(8.0);}

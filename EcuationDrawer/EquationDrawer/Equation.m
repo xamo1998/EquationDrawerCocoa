@@ -6,9 +6,9 @@
 //  Copyright © 2018 xamo. All rights reserved.
 //
 
-#import "Ecuation.h"
+#import "Equation.h"
 #define NaN -99999998
-@implementation Ecuation
+@implementation Equation
 @synthesize name;
 @synthesize displayName;
 - (id)initWithEquationToSolve:(NSString *)equationToSolve

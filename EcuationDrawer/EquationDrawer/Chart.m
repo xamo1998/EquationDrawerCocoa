@@ -20,7 +20,7 @@
     
     [[NSBezierPath bezierPathWithRect:NSMakeRect(_startDraggedPoint.x, _startDraggedPoint.y, _endDraggedPoint.x-_startDraggedPoint.x, _endDraggedPoint.y-_startDraggedPoint.y)]fill];
     
-    [self drawAxisWithGrid:[graphicsController isGridEnabled] withNumbers:[graphicsController isNumbersEnabled] withTickMarks:[graphicsController isTickMarksEnabled] withStepValue:1];
+    [self drawAxisWithGrid:[graphicsController isGridEnabled] withTickMarks:[graphicsController isTickMarksEnabled] withStepValue:1];
     
     NSRect bounds =[self bounds];
     NSGraphicsContext *context = [NSGraphicsContext currentContext];
@@ -124,7 +124,7 @@
 }
 
 //Drawing methods
--(void)drawAxisWithGrid:(bool)grid withNumbers:(bool)numbers withTickMarks:(bool)tickMarks withStepValue:(float)stepValue{
+-(void)drawAxisWithGrid:(bool)grid withTickMarks:(bool)tickMarks withStepValue:(float)stepValue{
     NSRect funcRect=[graphicsController getFuncRect];
     float maxHeight=funcRect.size.height;
     float maxWidth=funcRect.size.width;
@@ -144,8 +144,7 @@
         [self drawGrid:[graphicsController getStepValue] withMaxPoint:maxPoint];
     if(tickMarks)
         [self drawTickMarks];
-    if(numbers)
-        [self drawNumbers];
+  
     
     
     //Dibujamos los ejes
@@ -186,7 +185,6 @@
 -(void)drawTickMarks{
     NSRect rectX, rectY;
     NSBezierPath *pathY, *pathX;
-    int contadorDarkGrey=0;
     float lineWidth=[graphicsController getWidthOfGridLine];
     NSRect funcRect=[graphicsController getFuncRect];
     float stepValueX=(funcRect.size.width)/14.0;
@@ -197,8 +195,6 @@
     yMin=funcRect.origin.y;
     xMax=funcRect.size.width-(-xMin);
     yMax=funcRect.size.height-(-yMin);
-    float widthConstantY=funcRect.size.height/200;
-    float widthConstantX=funcRect.size.width/200;
     NSLog(@"xMin:%.2f__xMax:%.2f\nyMin:%.2f__yMax:%.2f",xMin,xMax,yMin,yMax);
     
     
@@ -286,125 +282,6 @@
             [pathX fill];
         }
     }
-    
-}
--(void)drawNumbers{
-    int contadorNumbers=0;
-    float textSize, offsetX, offsetY;
-    NSRect rectX, rectY;
-    NSBezierPath *pathY, *pathX;
-    NSRect funcRect=[graphicsController getFuncRect];
-    textSize=[graphicsController getTextSize];
-    offsetX=[graphicsController getXOffsetForNumbers];
-    offsetY=[graphicsController getYOffsetForNumbers];
-    float stepValueX=(funcRect.size.width)/14.0;
-    float stepValueY=(funcRect.size.height)/10.0;
-    
-    NSDictionary *attributes;
-    /*float widthPercent=textSize/funcRect.size.width*100;
-    float heightPercent=textSize/funcRect.size.height*100;
-    float min, max;
-    if(widthPercent<heightPercent){
-        min=widthPercent;
-        max=heightPercent;
-    }else{
-        min=heightPercent;
-        max=widthPercent;
-    }
-    if(min<1.75)*/
-    
-    float size=12*(((funcRect.size.height/_bounds.size.height)+(funcRect.size.width/_bounds.size.width))/2);
-        attributes=[NSDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:size/*stepValueY*textSize/20*/], NSFontAttributeName, nil];
-    //else
-    //    attributes=[NSDictionary dictionaryWithObjectsAndKeys:[NSFont fontWithName:@"Helvetica" size:textSize*(textSize/max*100)/200],NSFontAttributeName, nil];
-    
-    //attributes=[]
-    //===========================
-    float xMin, xMax, yMin, yMax;
-    xMin=funcRect.origin.x;
-    yMin=funcRect.origin.y;
-    xMax=funcRect.size.width-(-xMin);
-    yMax=funcRect.size.height-(-yMin);
-    float widthConstantY=funcRect.size.height/200;
-    float widthConstantX=funcRect.size.width/200;
-    NSLog(@"xMin:%.2f__xMax:%.2f\nyMin:%.2f__yMax:%.2f",xMin,xMax,yMin,yMax);
-    
-    
-    //[[NSColor blackColor]set];
-    
-    NSLog(@"TextSize:%.2f",textSize*funcRect.size.width/200);
-    //Eje X:
-    float yPosition;
-    if(xMin>=0){
-        if(funcRect.origin.y<=0 && yMax>0) yPosition=stepValueY/8;
-        else if(funcRect.origin.y>0) yPosition=stepValueY/8;
-        else yPosition=yMax-stepValueY/4-size;
-        for(float i=xMin+stepValueX; i<=funcRect.size.width+xMin;i+=stepValueX){ //Grid Vertical Positivo
-            
-            NSAttributedString *string =[[NSAttributedString alloc]initWithString:[NSString stringWithFormat:@"%.2f",i] attributes:attributes];
-            [string drawAtPoint:NSMakePoint(i, yPosition)];
-        }
-    }if(xMin<0 && xMax>0){
-        if(funcRect.origin.y<=0 && yMax>0) yPosition=stepValueY/8;
-        else if(funcRect.origin.y>0) yPosition=stepValueY/8;
-        else yPosition=yMax-stepValueY/4-size;
-        for(float i=stepValueX; i<=funcRect.size.width;i+=stepValueX){ //Grid Vertical Positivo
-            NSAttributedString *string =[[NSAttributedString alloc]initWithString:[NSString stringWithFormat:@"%.2f",i] attributes:attributes];
-            [string drawAtPoint:NSMakePoint(i, yPosition)];
-        }
-        for(float i=-stepValueX; i>=funcRect.origin.x;i-=stepValueX){ //Grid Vertical Positivo
-            NSAttributedString *string =[[NSAttributedString alloc]initWithString:[NSString stringWithFormat:@"%.2f",i] attributes:attributes];
-            [string drawAtPoint:NSMakePoint(i, yPosition)];
-            
-        }
-    }if(xMax<=0){
-        if(funcRect.origin.y<=0 && yMax>0) yPosition=stepValueY/8;
-        else if(funcRect.origin.y>0) yPosition=stepValueY/8;
-        else yPosition=yMax-stepValueY/4-size;
-        for(float i=xMax-stepValueX; i>=funcRect.origin.x;i-=stepValueX){ //Grid Vertical Positivo
-            //[NSAttributedString alloc]init
-            NSAttributedString *string =[[NSAttributedString alloc]initWithString:[NSString stringWithFormat:@"%.2f",i] attributes:attributes];
-            [string drawAtPoint:NSMakePoint(i, yPosition)];
-        }
-    }
-    
-    
-    //Eje Y:
-    float xPosition;
-    if(yMin>=0){
-        if(funcRect.origin.x<=0 && yMax>0) xPosition=stepValueX/8;
-        else if(funcRect.origin.x>0) xPosition=stepValueX/8;
-        else xPosition=xMax-stepValueX/4-size;
-        for(float i=yMin+stepValueY; i<=funcRect.size.height+yMin;i+=stepValueY){ //Grid Vertical Positivo
-            
-            NSAttributedString *string =[[NSAttributedString alloc]initWithString:[NSString stringWithFormat:@"%.2f",i] attributes:attributes];
-            [string drawAtPoint:NSMakePoint(xPosition,i)];
-        }
-    }if(yMin<0 && yMax>0){
-        if(funcRect.origin.x<=0 && xMax>0) xPosition=stepValueX/8;
-        else if(funcRect.origin.x>0) xPosition=stepValueX/8;
-        else xPosition=xMax-stepValueX/4-size;
-        for(float i=stepValueY; i<=funcRect.size.height;i+=stepValueY){ //Grid Vertical Positivo
-            NSAttributedString *string =[[NSAttributedString alloc]initWithString:[NSString stringWithFormat:@"%.2f",i] attributes:attributes];
-            [string drawAtPoint:NSMakePoint(xPosition,i)];
-        }
-        for(float i=-stepValueY; i>=funcRect.origin.y;i-=stepValueY){ //Grid Vertical Positivo
-            NSAttributedString *string =[[NSAttributedString alloc]initWithString:[NSString stringWithFormat:@"%.2f",i] attributes:attributes];
-            [string drawAtPoint:NSMakePoint(xPosition,i)];
-            
-        }
-    }if(yMax<=0){
-        if(funcRect.origin.x<=0 && xMax>0) xPosition=stepValueX/8;
-        else if(funcRect.origin.x>0) xPosition=stepValueX/8;
-        else xPosition=xMax-stepValueX/4-size;
-        for(float i=yMax-stepValueY; i>=funcRect.origin.y;i-=stepValueY){ //Grid Vertical Positivo
-            //[NSAttributedString alloc]init
-            NSAttributedString *string =[[NSAttributedString alloc]initWithString:[NSString stringWithFormat:@"%.2f",i] attributes:attributes];
-            [string drawAtPoint:NSMakePoint(xPosition,i)];
-        }
-    }
-    
-    
     
 }
 

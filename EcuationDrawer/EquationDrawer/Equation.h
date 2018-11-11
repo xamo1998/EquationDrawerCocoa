@@ -7,10 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "EcuationData.h"
+#import "EquationData.h"
 #import "Math/EquationSolver.h"
 #import "Math/EquationParser.h"
-@interface Ecuation : NSObject{
+@interface Equation : NSObject{
     EquationParser *parser;
     EquationSolver *solver;
     NSBezierPath *bezierPath;

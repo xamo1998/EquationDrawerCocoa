@@ -27,7 +27,7 @@ extern NSString * DrawGraphicNotification;
                selector:@selector(handleReloadImage:)
                    name:ReloadImageViewNotification
                  object:nil];
-    modelo=[[Modelo alloc]init];
+    modelo=[[Model alloc]init];
     NSLog(@"VALUE: %f", sqrtf(-1.0f));
     return self;
 }
@@ -40,9 +40,7 @@ extern NSString * DrawGraphicNotification;
     preferenceWindow.modelo=modelo;
     [preferenceWindow showWindow:self];
 }
--(void) handleReloadImage:(NSNotification *)notification{
-    preferenceWindow.currentView=chartView;
-}
+
 -(void) handleDrawGraphic:(NSNotification *)notification{
     //NSLog(@"Me ha llegado la notificacion");
     [chartView setNeedsDisplay:true];
@@ -52,7 +50,7 @@ extern NSString * DrawGraphicNotification;
 -(void)drawPolynomialsInBounds:(NSRect)bounds withGC:(NSGraphicsContext *)context{
     //NSLog(@"RRTOLLL");
     //[self drawChartWithRect:bounds withGC:context];
-    for(Ecuation *e in [modelo drawedEquations]){
+    for(Equation *e in [modelo drawedEquations]){
         [e drawInRect:bounds withGraphicsContext:context withFuncRect:[modelo funcRect] withHops:[modelo hops]];
     }
 }
@@ -92,7 +90,6 @@ extern NSString * DrawGraphicNotification;
     
     
 }
--(bool)isNumbersEnabled{return[modelo numbers];}
 -(bool)isGridEnabled{return[modelo grid];}
 -(bool)isTickMarksEnabled{return[modelo tickMarks];}
 -(float)getWidthOfGridLine{return [modelo getWidthOfGridLine];}

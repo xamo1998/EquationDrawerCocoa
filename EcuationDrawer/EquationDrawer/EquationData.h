@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface EcuationData : NSObject{
+@interface EquationData : NSObject{
     
 }
 @property NSString *name, *displayName;

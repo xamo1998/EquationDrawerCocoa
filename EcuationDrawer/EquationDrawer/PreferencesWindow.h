@@ -7,10 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "Modelo.h"
-#import "Ecuation.h"
-@class Ecuation;
-@class Modelo;
+#import "Model.h"
+#import "Equation.h"
+@class Equation;
+@class Model;
 @interface PreferencesWindow : NSWindowController<NSComboBoxDataSource,
                                                   NSComboBoxDelegate,
                                                   NSTableViewDataSource,
@@ -29,11 +29,12 @@
                                                       *allEquationsTableView;
                                                       
 }
-@property Modelo *modelo;
+@property Model *modelo;
 @property NSView *currentView;
 -(void)updateXandYValues;
 -(void)recalculateWidths;
 -(bool)checkCorrectEquation;
+
 -(IBAction)addGraphic:(id)sender;
 -(IBAction)visualPropertyListener:(id)sender;
 -(IBAction)nameVisualPreferenceEditTextListener:(id)sender;

@@ -6,9 +6,9 @@
 //  Copyright © 2018 xamo. All rights reserved.
 //
 
-#import "EcuationData.h"
+#import "EquationData.h"
 
-@implementation EcuationData
+@implementation EquationData
 @synthesize name;
 @synthesize termCount;
 @synthesize terms;

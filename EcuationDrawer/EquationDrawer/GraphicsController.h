@@ -14,7 +14,7 @@
 @class Chart;
 @interface GraphicsController : NSObject<NSWindowDelegate>{
     PreferencesWindow *preferenceWindow;
-    Modelo *modelo;
+    Model *modelo;
     IBOutlet Chart *chartView;
 }
 -(NSRect)getFuncRect;
@@ -26,7 +26,6 @@
 -(float)getWidthOfGraphicsLine;
 -(float)getWidthOfGridLine;
 -(float)getTextSize;
--(bool)isNumbersEnabled;
 -(bool)isGridEnabled;
 -(bool)isTickMarksEnabled;
 -(float)getXOffsetForNumbers;

@@ -7,8 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "EcuationData.h"
-@interface Modelo : NSObject{
+#import "EquationData.h"
+@interface Model : NSObject{
     
 }
 @property NSColor *backgroundColor;
@@ -18,7 +18,7 @@
 @property NSImage *image;
 @property float lineWidth;
 @property NSRect funcRect;
-@property bool numbers, grid, tickMarks;
+@property bool grid, tickMarks;
 -(void)createTitleOfEcuations;
 -(float)getWidthOfGraphicsLine;
 -(float)getWidthOfGridLine;
