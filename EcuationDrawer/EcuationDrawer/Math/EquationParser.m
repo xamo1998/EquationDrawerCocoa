@@ -7,6 +7,7 @@
 //
 
 #import "EquationParser.h"
+#import "BalancedParentheses.h"
 
 @implementation EquationParser
 - (id)initWithEquationToSolve:(NSString *)equationToSolve
@@ -28,7 +29,19 @@
 }
 -(void)parseEquation{
     //Miramos parentesis balanceados...
-    
+    BalancedParentheses *bp= [[BalancedParentheses alloc]init];
+    NSMutableArray *temp=[[NSMutableArray alloc]init];
+    NSRange r;
+    r.length=1;
+    for(int i=0; i<[_equationToSolve length];i++){
+        r.location=i;
+        [temp addObject:[NSString stringWithFormat:@"%c",[_equationToSolve characterAtIndex:i]] ];
+    }
+    if(![bp areParenthesesBalanced:temp]){
+        NSLog(@"NOT BALANCED");
+        _equationSplitted=NULL;
+        return;
+    }
     NSRange range;
     for(int i=0; i<[_equationToSolve length]; i++){
         range.length=1;

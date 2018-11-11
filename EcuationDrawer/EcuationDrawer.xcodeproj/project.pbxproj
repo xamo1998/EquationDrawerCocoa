@@ -15,6 +15,8 @@
 		20D514F62162C0DC00528E6C /* EcuationDrawerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D514F52162C0DC00528E6C /* EcuationDrawerUITests.m */; };
 		20D515412163861900528E6C /* Chart.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D515402163861900528E6C /* Chart.m */; };
 		20D51544216FD0B800528E6C /* Ecuation.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D51543216FD0B800528E6C /* Ecuation.m */; };
+		20D5154A21985EA800528E6C /* Stack.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D5154921985EA800528E6C /* Stack.m */; };
+		20D5154D219861ED00528E6C /* BalancedParentheses.m in Sources */ = {isa = PBXBuildFile; fileRef = 20D5154C219861ED00528E6C /* BalancedParentheses.m */; };
 		7DE2BCFB2187146400CFFE6C /* Operation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE2BCFA2187146400CFFE6C /* Operation.m */; };
 		7DE2BCFE2187147400CFFE6C /* EquationParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE2BCFD2187147400CFFE6C /* EquationParser.m */; };
 		7DE2BD012187148C00CFFE6C /* EquationSolver.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE2BD002187148C00CFFE6C /* EquationSolver.m */; };
@@ -61,6 +63,10 @@
 		20D515402163861900528E6C /* Chart.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Chart.m; sourceTree = "<group>"; };
 		20D51542216FD0B800528E6C /* Ecuation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ecuation.h; sourceTree = "<group>"; };
 		20D51543216FD0B800528E6C /* Ecuation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Ecuation.m; sourceTree = "<group>"; };
+		20D5154821985EA800528E6C /* Stack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Stack.h; sourceTree = "<group>"; };
+		20D5154921985EA800528E6C /* Stack.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Stack.m; sourceTree = "<group>"; };
+		20D5154B219861ED00528E6C /* BalancedParentheses.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BalancedParentheses.h; sourceTree = "<group>"; };
+		20D5154C219861ED00528E6C /* BalancedParentheses.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BalancedParentheses.m; sourceTree = "<group>"; };
 		7DE2BCF92187146400CFFE6C /* Operation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Operation.h; sourceTree = "<group>"; };
 		7DE2BCFA2187146400CFFE6C /* Operation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Operation.m; sourceTree = "<group>"; };
 		7DE2BCFC2187147400CFFE6C /* EquationParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EquationParser.h; sourceTree = "<group>"; };
@@ -178,6 +184,10 @@
 				7DE2BCFD2187147400CFFE6C /* EquationParser.m */,
 				7DE2BCFF2187148C00CFFE6C /* EquationSolver.h */,
 				7DE2BD002187148C00CFFE6C /* EquationSolver.m */,
+				20D5154821985EA800528E6C /* Stack.h */,
+				20D5154921985EA800528E6C /* Stack.m */,
+				20D5154B219861ED00528E6C /* BalancedParentheses.h */,
+				20D5154C219861ED00528E6C /* BalancedParentheses.m */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -315,6 +325,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20D5154A21985EA800528E6C /* Stack.m in Sources */,
 				20D515412163861900528E6C /* Chart.m in Sources */,
 				20D51544216FD0B800528E6C /* Ecuation.m in Sources */,
 				7DE2BCFE2187147400CFFE6C /* EquationParser.m in Sources */,
@@ -325,6 +336,7 @@
 				20D514E02162C0DB00528E6C /* main.m in Sources */,
 				FBFC5899217F6A9E005539E0 /* GraphicsController.m in Sources */,
 				20D514D82162C0D200528E6C /* AppDelegate.m in Sources */,
+				20D5154D219861ED00528E6C /* BalancedParentheses.m in Sources */,
 				FBFC58A3217F6EEF005539E0 /* Modelo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

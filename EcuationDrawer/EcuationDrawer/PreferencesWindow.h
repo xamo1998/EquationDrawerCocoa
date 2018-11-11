@@ -32,6 +32,7 @@
 @property Modelo *modelo;
 @property NSView *currentView;
 -(void)updateXandYValues;
+-(void)recalculateWidths;
 -(bool)checkCorrectEquation;
 -(IBAction)addGraphic:(id)sender;
 -(IBAction)visualPropertyListener:(id)sender;

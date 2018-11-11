@@ -59,11 +59,23 @@ extern NSString * DrawGraphicNotification;
 -(NSRect)getFuncRect{
     return [modelo funcRect];
 }
+-(BOOL)windowShouldClose:(NSWindow *)sender{
+    NSInteger response;
+    response= NSRunAlertPanel(@"Cuidado",
+                              @"¿Estas seguro de que quieres cerrar la aplicación?",
+                              @"Si",
+                              @"No",nil);
+    if(response == NSAlertDefaultReturn)
+        return true;
+    else
+        return false;
+}
 -(void)setFuncRect:(NSRect)funcRect{
     
     [modelo setFuncRect:funcRect];
     NSLog(@"RECT: %.2f__%.2f_____%.2f__%.2f",funcRect.origin.x, funcRect.origin.y, funcRect.size.width, funcRect.size.height);
     [preferenceWindow updateXandYValues];
+    [preferenceWindow recalculateWidths];
     [chartView setNeedsDisplay:true];
 }
 -(void)zoomOut:(id)sender{

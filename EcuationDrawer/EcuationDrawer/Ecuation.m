@@ -18,7 +18,8 @@
     if(!self){
         
     }
-    self.lineWidth=0.6;
+    
+    
     self.equationToSolve=equationToSolve;
     self.paramValues=paramValues;
     self.params=params;
@@ -40,6 +41,7 @@
     [transform translateXBy:bounds.size.width/2 yBy:bounds.size.height/2];
     [transform scaleXBy:bounds.size.width/funcRect.size.width yBy:bounds.size.height/funcRect.size.height];
     [transform concat];*/
+    NSLog(@"WI:%f",_lineWidth);
     [bezierPath setLineWidth:_lineWidth];
     [_color setStroke];
     point.x=funcRect.origin.x;
@@ -49,7 +51,7 @@
     while(point.x<=funcRect.origin.x+funcRect.size.width){
         point.y=[self valueAt:point.x];
         if(point.y!=NaN){
-            NSLog(@"X:%f    Y:%f",point.x,point.y);
+            //NSLog(@"X:%f    Y:%f",point.x,point.y);
             if((previousPoint.y>0 && point.y<0 && (previousPoint.y-point.y)>5) || (previousPoint.y<0 && point.y>0 && (point.y-previousPoint.y)>5)){
                 [bezierPath moveToPoint:point];
             }else{

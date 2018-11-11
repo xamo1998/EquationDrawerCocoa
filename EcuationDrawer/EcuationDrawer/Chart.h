@@ -12,6 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Chart : NSView{
+    IBOutlet  NSButton *zoomIn, *zoomOut;
     IBOutlet __weak GraphicsController *graphicsController;
     IBOutlet NSTextField *xValue, *yValue;
 }

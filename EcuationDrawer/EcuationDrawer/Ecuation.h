@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "EcuationData.h"
 #import "Math/EquationSolver.h"
-#import "MAth/EquationParser.h"
+#import "Math/EquationParser.h"
 @interface Ecuation : NSObject{
     EquationParser *parser;
     EquationSolver *solver;

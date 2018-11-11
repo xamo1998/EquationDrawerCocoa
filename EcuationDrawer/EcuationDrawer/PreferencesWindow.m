@@ -62,15 +62,19 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     }
 }
 -(void)widthSliderListener:(id)sender{
+    bool isDrawed=false;
     if([allEquationsTableView selectedRow]>=0){
         Ecuation *equation;
         if((int)[allEquationsTableView selectedRow]>((int)[[modelo ecuations]count]-1)){
             equation=[[modelo drawedEquations]objectAtIndex: [allEquationsTableView selectedRow]-[[modelo ecuations]count]];
+            isDrawed=true;
         }else{
+            isDrawed=false;
             equation=[[modelo ecuations]objectAtIndex:[allEquationsTableView selectedRow]];
         }
         [equation setLineWidth:[sender floatValue]];
-        [notificationCenter postNotificationName:DrawGraphicNotification object:self]; //Improve solo si está dibujada
+        if(isDrawed)
+            [notificationCenter postNotificationName:DrawGraphicNotification object:self]; //Improve solo si está dibujada
     }
     
     
@@ -94,6 +98,7 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
         [[modelo drawedEquations]removeObjectAtIndex:indexDrawedEquations];
         [drawedEquations reloadData];
         [drawedEquationsInterpeterWindow reloadData];
+        [notificationCenter postNotificationName:DrawGraphicNotification object:self];
     }
     
 }
@@ -119,6 +124,12 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     [equation setDisplayName:displayName];
     [equation setColor:[colorWellInterpeterWindow color]];
     [equation setName:[nameTextFieldInterpeterWindow stringValue]];
+    
+    NSRect rect=[modelo funcRect];
+    float width=0.6*(rect.size.width+rect.size.height)/400;
+    if(width<0.05) width=0.05;
+    [equation setLineWidth:width];
+    
     [[modelo ecuations]addObject:equation];
     [colorWellInterpeterWindow setColor:[self getRandomColor]];
     [equationsInterpeterWindow reloadData];
@@ -134,7 +145,10 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     [ecuation setColor:[colorWell color]];
     [ecuation setName:[nameTextField stringValue]];
     [ecuation setDisplayName:[data getCustomizedName:termValues]];
-    //ecuation.name=[nameTextField stringValue];
+    NSRect rect=[modelo funcRect];
+    float width=0.6*(rect.size.width+rect.size.height)/400;
+    if(width<0.05) width=0.05;
+    [ecuation setLineWidth:width];    //ecuation.name=[nameTextField stringValue];
     //ecuation.color=[colorWell color];
     //ecuation.ecuation=[[[modelo ecuationData]objectAtIndex:indexComboBox]getCustomizedName:termValues];
     [[modelo ecuations]addObject:ecuation];
@@ -174,14 +188,105 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     if([[xEnd stringValue]length] > 0 && [[yEnd stringValue]length] > 0 && [[xStart stringValue]length] > 0 && [[yStart stringValue]length] > 0){
         float width, height;
         
+        if([xStart floatValue]<[xEnd floatValue]){
+            if([yStart floatValue]<[yEnd floatValue]){
+            [modelo setFuncRect: NSMakeRect([xStart floatValue], [yStart floatValue], abs([xStart floatValue])+[xEnd floatValue],abs([yStart floatValue])+[yEnd floatValue])];
+                [self recalculateWidths];
+                [notificationCenter postNotificationName:DrawGraphicNotification object:self];
+            }else
+                [self animateTextField:sender];
+        }else
+            [self animateTextField:sender];
         
-        [modelo setFuncRect: NSMakeRect([xStart floatValue], [yStart floatValue], abs([xStart floatValue])+[xEnd floatValue],abs([yStart floatValue])+[yEnd floatValue])];
-        [notificationCenter postNotificationName:DrawGraphicNotification object:self];
     }
+    [sender deselectAllCells];
+}
+-(void)recalculateWidths{
+    NSMutableArray *equations, *drawed;
+    equations=[modelo ecuations];
+    drawed=[modelo drawedEquations];
+    NSRect rect=[modelo funcRect];
+    for(int i=0; i<[equations count];i++){
+        Ecuation *equation=[equations objectAtIndex:i];
+        CGFloat width=[equation lineWidth];
+        width*=(rect.size.width+rect.size.height)/400;
+        if(width<0.05) width=0.05;
+        [equation setLineWidth:width];
+    }
+    for(int i=0; i<[drawed count];i++){
+        Ecuation *equation=[drawed objectAtIndex:i];
+        CGFloat width=[equation lineWidth];
+        width*=(rect.size.height+rect.size.width)/400;
+        if(width<0.05) width=0.05;
+        [equation setLineWidth:width];
+    }
+    NSInteger index=[allEquationsTableView selectedRow];
+    if(index!=-1){
+        Ecuation *eq;
+        if((int)[allEquationsTableView selectedRow]>(int)[[modelo ecuations]count]-1){
+            eq=[[modelo drawedEquations]objectAtIndex:[allEquationsTableView selectedRow]-[[modelo ecuations]count]];
+        }else{
+            eq=[[modelo ecuations]objectAtIndex:[allEquationsTableView selectedRow]];
+        }
+        [widthSlider setFloatValue:[eq lineWidth]];
+    }
+}
+-(void)animateTextField:(NSTextField *)textField{
+    
+    NSRect textFieldFrame = [textField frame];
+    CGFloat centerX=textFieldFrame.origin.x;
+    CGFloat centerY=textFieldFrame.origin.y;
+    NSPoint origin = NSMakePoint(centerX, centerY);
+    NSPoint one = NSMakePoint(centerX-5, centerY);
+    NSPoint two = NSMakePoint(centerX+5, centerY);
+    //if([NSAnimationContext currentContext]isCom)
+    [NSAnimationContext beginGrouping];
+    [[NSAnimationContext currentContext] setCompletionHandler:^{
+        
+        [NSAnimationContext beginGrouping];
+        [[NSAnimationContext currentContext] setCompletionHandler:^{
+            
+            
+            [NSAnimationContext beginGrouping];
+            [[NSAnimationContext currentContext] setCompletionHandler:^{
+                
+                [NSAnimationContext beginGrouping];
+                [[NSAnimationContext currentContext] setCompletionHandler:^{
+                    
+                    [[NSAnimationContext currentContext] setDuration:0.0175];
+                    [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
+                    [[textField animator] setFrameOrigin:origin];
+                    
+                }];
+                
+                [[NSAnimationContext currentContext] setDuration:0.0175];
+                [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
+                [[textField animator] setFrameOrigin:two];
+                [NSAnimationContext endGrouping];
+                
+            }];
+            
+            [[NSAnimationContext currentContext] setDuration:0.0175];
+            [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
+            [[textField animator] setFrameOrigin:one];
+            [NSAnimationContext endGrouping];
+        }];
+        
+        [[NSAnimationContext currentContext] setDuration:0.0175];
+        [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
+        [[textField animator] setFrameOrigin:two];
+        [NSAnimationContext endGrouping];
+        
+    }];
+    
+    [[NSAnimationContext currentContext] setDuration:0.0175];
+    [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
+    [[textField animator] setFrameOrigin:one];
+    [NSAnimationContext endGrouping];
 }
 -(void)customParamsEditTextListener:(id)sender{
     if([counterInterpeterWindow integerValue]>=0 && [counterInterpeterWindow integerValue]<15){
-        NSLog(@"VALOR: %d",[counterInterpeterWindow integerValue]);
+        //NSLog(@"VALOR: %d",[counterInterpeterWindow integerValue]);
         [termsValuesInterpeterWindow removeAllObjects];
         for(int i=0; i<[counterInterpeterWindow integerValue]; i++){
             [termsValuesInterpeterWindow addObject:@""];
@@ -196,69 +301,21 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
         NSRect textFieldFrame = [counterInterpeterWindow frame];
         CGFloat centerX=textFieldFrame.origin.x;
         CGFloat centerY=textFieldFrame.origin.y;
-        NSPoint origin = NSMakePoint(centerX, centerY);
-        NSPoint one = NSMakePoint(centerX-5, centerY);
-        NSPoint two = NSMakePoint(centerX+5, centerY);
+        //NSPoint origin = NSMakePoint(centerX, centerY);
+        //NSPoint one = NSMakePoint(centerX-5, centerY);
+        //NSPoint two = NSMakePoint(centerX+5, centerY);
+        if([counterInterpeterWindow frame].origin.x==centerX)
+            [self animateTextField:counterInterpeterWindow];
         
-      //  [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]
-        //counterInterpeterWindow.focusRingType=[NSFocusRingTypeDefault alloc];
-        NSSetFocusRingStyle(NSFocusRingOnly);
-        //[counterInterpeterWindow.focusView ]
-        //counterInterpeterWindow.layer.borderColor=[[NSColor redColor]CGColor];
-        //
-        [counterInterpeterWindow setBackgroundColor:[NSColor redColor]];
-        [NSAnimationContext beginGrouping];
-        [[NSAnimationContext currentContext] setCompletionHandler:^{
-            
-            [NSAnimationContext beginGrouping];
-            [[NSAnimationContext currentContext] setCompletionHandler:^{
-                
-                
-                [NSAnimationContext beginGrouping];
-                [[NSAnimationContext currentContext] setCompletionHandler:^{
-                    
-                    [NSAnimationContext beginGrouping];
-                    [[NSAnimationContext currentContext] setCompletionHandler:^{
-                        
-                        [[NSAnimationContext currentContext] setDuration:0.0175];
-                        [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
-                        [[counterInterpeterWindow animator] setFrameOrigin:origin];
-                        
-                    }];
-                    
-                    [[NSAnimationContext currentContext] setDuration:0.0175];
-                    [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
-                    [[counterInterpeterWindow animator] setFrameOrigin:two];
-                    [NSAnimationContext endGrouping];
-                    
-                }];
-                
-                [[NSAnimationContext currentContext] setDuration:0.0175];
-                [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
-                [[counterInterpeterWindow animator] setFrameOrigin:one];
-                [NSAnimationContext endGrouping];
-            }];
-            
-            [[NSAnimationContext currentContext] setDuration:0.0175];
-            [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
-            [[counterInterpeterWindow animator] setFrameOrigin:two];
-            [NSAnimationContext endGrouping];
-            
-        }];
-        
-        [[NSAnimationContext currentContext] setDuration:0.0175];
-        [[NSAnimationContext currentContext] setTimingFunction: [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseOut]];
-        [[counterInterpeterWindow animator] setFrameOrigin:one];
-        [NSAnimationContext endGrouping];
-        
-        counterInterpeterWindow.layer.borderColor=[[NSColor systemBlueColor]CGColor];
-        counterInterpeterWindow.layer.borderWidth=1.0;
-        //[counterInterpeterWindow anim]
     }
     
 }
 -(void)updateXandYValues{
     NSRect rect=[modelo funcRect];
+    //if([xStart floatValue]>=[xEnd floatValue])
+      //  [self animateTextField:xEnd];
+    
+        
     [xStart setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.x]];
     [yStart setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.y]];
     [xEnd setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.x+rect.size.width]];
@@ -375,7 +432,9 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
         return;
     }
     Ecuation *equation;
+    bool isDrawed=false;
     if([allEquationsTableView selectedRow]>(int)[[modelo ecuations]count]-1){
+        isDrawed=true;
         equation=[[modelo drawedEquations]objectAtIndex: [allEquationsTableView selectedRow]-[[modelo ecuations]count]];
     }else{
         equation=[[modelo ecuations]objectAtIndex:[allEquationsTableView selectedRow]];
@@ -386,7 +445,8 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     [drawedEquations reloadData];
     [drawedEquationsInterpeterWindow reloadData];
     [allEquationsTableView reloadData];
-    [notificationCenter postNotificationName:DrawGraphicNotification object:self];
+    if(isDrawed)
+        [notificationCenter postNotificationName:DrawGraphicNotification object:self];
 }
 
 - (void)sendToLeft:(id)sender{
@@ -455,17 +515,16 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     
 }
 
-
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
     //Comprovación de tabla
     if(tableView==paramsTableView){
         [termValues removeObjectAtIndex:row];
-        [termValues insertObject:[NSString stringWithFormat:@"%d",[object integerValue]] atIndex:row];
+        [termValues insertObject:[NSString stringWithFormat:@"%.2f",[object floatValue]] atIndex:row];
         [paramsTableView reloadData];
         [self checkCorrectGraphic];
     }else if(tableView==paramsInterpeterWindow){
         [termsValuesInterpeterWindow removeObjectAtIndex:row];
-        [termsValuesInterpeterWindow insertObject:[NSString stringWithFormat:@"%d",[object integerValue]] atIndex:row];
+        [termsValuesInterpeterWindow insertObject:[NSString stringWithFormat:@"%.2f",[object floatValue]] atIndex:row];
         [paramsInterpeterWindow reloadData];
         int counter=0;
         for(int i=0; i<[termsValuesInterpeterWindow count]; i++){
@@ -576,7 +635,7 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
         data=[rep representationUsingType:NSJPEG2000FileType properties:nil];
     }
     [savePanel setCanCreateDirectories:true];
-    [savePanel setPrompt:@"Save"];
+    [savePanel setPrompt:@"Guardar"];
     [savePanel beginWithCompletionHandler:^(NSInteger result){
         if(result==NSFileHandlingPanelOKButton){
             NSFileManager *manager = [NSFileManager defaultManager];

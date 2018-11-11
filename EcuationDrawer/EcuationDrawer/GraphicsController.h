@@ -12,7 +12,7 @@
 #import "Math/EquationSolver.h"
 #import "Chart.h"
 @class Chart;
-@interface GraphicsController : NSObject{
+@interface GraphicsController : NSObject<NSWindowDelegate>{
     PreferencesWindow *preferenceWindow;
     Modelo *modelo;
     IBOutlet Chart *chartView;
