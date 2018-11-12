@@ -14,26 +14,24 @@
 @synthesize equations;
 -(id)init{
     self=[super init];
-    if(!self){
-        
+    if(self){
+        self.backgroundColor=[NSColor whiteColor];
+        self.hops=4000;
+        self.lineWidth=0.6;
+        self.grid=true;
+        self.tickMarks=true;
+        self.funcRect=NSMakeRect(-100,-100,200,200);
+        equationData=[[NSMutableArray alloc]init];
+        _drawedEquations=[[NSMutableArray alloc]init];
+        equations=[[NSMutableArray alloc]init];
+        [self createTitleOfEcuations];    
     }
-    self.backgroundColor=[NSColor whiteColor];
-    self.hops=4000;
-    self.lineWidth=0.6;
-    self.grid=true;
-    self.tickMarks=true;
-    self.funcRect=NSMakeRect(-100,-100,200,200);
-    equationData=[[NSMutableArray alloc]init];
-    _drawedEquations=[[NSMutableArray alloc]init];
-    equations=[[NSMutableArray alloc]init];
-    [self createTitleOfEcuations];
+    
     return self;
 }
 
 -(void)createTitleOfEcuations{
     [equationData addObject:[[EquationData alloc]initWithName:@"a*sen(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
-    EquationData *data =[equationData objectAtIndex:0];
-    //NSLog(@"LIST: %@",[data terms]);
     [equationData addObject:[[EquationData alloc]initWithName:@"a*cos(b*x)" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
     [equationData addObject:[[EquationData alloc]initWithName:@"a*x^n" withTerms:[self getArrayOfTerms:@"a",@"n",nil]]];
     [equationData addObject:[[EquationData alloc]initWithName:@"a*x+b" withTerms:[self getArrayOfTerms:@"a",@"b",nil]]];
@@ -53,7 +51,6 @@
         }
         va_end(argumentList);
     }
-    //NSLog(@"LIST DENTRO: %@",arguments);
     return arguments;
 }
 

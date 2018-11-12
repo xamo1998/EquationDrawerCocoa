@@ -15,20 +15,18 @@ extern NSString * ReloadImageViewNotification;
 extern NSString * DrawGraphicNotification;
 -(id)init{
     self=[super init];
-    if(!self){
-        
+    if(self){
+        NSNotificationCenter *center=[NSNotificationCenter defaultCenter];
+        [center addObserver:self
+                   selector:@selector(handleDrawGraphic:)
+                       name:DrawGraphicNotification
+                     object:nil];
+        [center addObserver:self
+                   selector:@selector(handleReloadImage:)
+                       name:ReloadImageViewNotification
+                     object:nil];
+        modelo=[[Model alloc]init];
     }
-    NSNotificationCenter *center=[NSNotificationCenter defaultCenter];
-    [center addObserver:self
-               selector:@selector(handleDrawGraphic:)
-                   name:DrawGraphicNotification
-                 object:nil];
-    [center addObserver:self
-               selector:@selector(handleReloadImage:)
-                   name:ReloadImageViewNotification
-                 object:nil];
-    modelo=[[Model alloc]init];
-    NSLog(@"VALUE: %f", sqrtf(-1.0f));
     return self;
 }
 -(NSColor *)getBackgroundColor{
@@ -42,14 +40,11 @@ extern NSString * DrawGraphicNotification;
 }
 
 -(void) handleDrawGraphic:(NSNotification *)notification{
-    //NSLog(@"Me ha llegado la notificacion");
     [chartView setNeedsDisplay:true];
 }
 
 
 -(void)drawPolynomialsInBounds:(NSRect)bounds withGC:(NSGraphicsContext *)context{
-    //NSLog(@"RRTOLLL");
-    //[self drawChartWithRect:bounds withGC:context];
     for(Equation *e in [modelo drawedEquations]){
         [e drawInRect:bounds withGraphicsContext:context withFuncRect:[modelo funcRect] withHops:[modelo hops]];
     }
@@ -71,7 +66,6 @@ extern NSString * DrawGraphicNotification;
 -(void)setFuncRect:(NSRect)funcRect{
     
     [modelo setFuncRect:funcRect];
-    NSLog(@"RECT: %.2f__%.2f_____%.2f__%.2f",funcRect.origin.x, funcRect.origin.y, funcRect.size.width, funcRect.size.height);
     [preferenceWindow updateXandYValues];
     [preferenceWindow recalculateWidths];
     [chartView setNeedsDisplay:true];

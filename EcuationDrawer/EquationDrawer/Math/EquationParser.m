@@ -14,21 +14,17 @@
                 withTermValues:(NSMutableArray *)termValues
                       withTerm:(NSMutableArray *)terms{
     self=[super init];
-    if(!self){
-        
+    if(self){
+        self.equationToSolve=equationToSolve;
+        self.terms=terms;
+        self.termValues=termValues;
+        self.equationSplitted=[[NSMutableArray alloc]init];
+        [self createListOfPosibleTerms];
+        [self parseEquation];  
     }
-    self.equationToSolve=equationToSolve;
-    self.terms=terms;
-    self.termValues=termValues;
-    self.equationSplitted=[[NSMutableArray alloc]init];
-    [self createListOfPosibleTerms];
-    [self parseEquation];
-    NSLog(@"DONE!");
-    NSLog(@"%@",_equationSplitted);
     return self;
 }
 -(void)parseEquation{
-    //Miramos parentesis balanceados...
     BalancedParentheses *bp= [[BalancedParentheses alloc]init];
     NSMutableArray *temp=[[NSMutableArray alloc]init];
     NSRange r;
@@ -38,7 +34,6 @@
         [temp addObject:[NSString stringWithFormat:@"%c",[_equationToSolve characterAtIndex:i]] ];
     }
     if(![bp areParenthesesBalanced:temp]){
-        NSLog(@"NOT BALANCED");
         _equationSplitted=NULL;
         return;
     }
@@ -46,22 +41,7 @@
     for(int i=0; i<[_equationToSolve length]; i++){
         range.length=1;
         range.location=i;
-        /*if([self isNumber:[_equationToSolve substringWithRange:range]]){
-            int lastIndexOfNumber= [self getIndexOfRaisedWithFirstValue:i withEquationToSolve:_equationToSolve];
-            NSLog(@"LAST INDEX: %d---%d",i, lastIndexOfNumber);
-            range.length=lastIndexOfNumber-i;
-            [_equationSplitted addObject:[_equationToSolve substringWithRange:range]];
-            //NSLog(@"1.-INTRODUZCO: %@", [_equationToSolve substringWithRange:range]);
-            i=lastIndexOfNumber;
-            range.location=i;
-            range.length=1;
-        }//else{*/
-            //range.location=i;
-            //range.length=1;
-            [_equationSplitted addObject:[_equationToSolve substringWithRange:range]];
-            //NSLog(@"2.-INTRODUZCO: %@", [_equationToSolve substringWithRange:range]);
-            
-        //}
+        [_equationSplitted addObject:[_equationToSolve substringWithRange:range]];
     }
     [self searchOperations];
     [self giveTermValues];
@@ -79,14 +59,12 @@
             }
         }
     }
-    //NSLog([self toString:_equationSplitted]);
     for(int i=0; i< [_equationSplitted count]; i++){
         NSString *splitValue=[NSString stringWithFormat:@"%@",[_equationSplitted objectAtIndex:i]];
         for(int j=0; j< [_posibleTerms count]; j++){
             NSString *posibleTermValue=[NSString stringWithFormat:@"%@",[_posibleTerms objectAtIndex:j]];
             if([splitValue isEqualToString:posibleTermValue]){
-                //NSLog(@"Found: %@",posibleTermValue);
-                _equationSplitted=NULL;//Hemos encontrado un termino que no estaba declarado.
+                _equationSplitted=NULL;
                 return;
             }
         }
@@ -119,12 +97,10 @@
     NSString *letterOfOperation;
     for(int i=0; i<[operations count]; i++){
         while([[self toString:_equationSplitted]containsString:[[operations objectAtIndex:i]splitted]]){
-            //NSLog(@"Hay una operacion");
             for(int j=0; j<[_equationSplitted count]; j++){
                 splitValue=[_equationSplitted objectAtIndex:j];
                 letterOfOperation=[[[operations objectAtIndex:i]letters]objectAtIndex:counter];
                 if([splitValue isEqualToString:letterOfOperation]){
-                    //NSLog(@"He encontrado la letra: %@ en la POS: i:%d;j:%d",splitValue,i,j);
                     counter++;
                     if(counter==[[[operations objectAtIndex:i]letters]count]){
                         indexOfOperation=j+1-[[[operations objectAtIndex:i]letters]count];
@@ -138,8 +114,6 @@
                 [_equationSplitted removeObjectAtIndex:indexOfOperation];
             }
             [_equationSplitted insertObject:[[operations objectAtIndex:i]operation] atIndex:indexOfOperation];
-            //NSLog(@"MODIFICADA OP");
-            //NSLog([self toString:_equationSplitted]);
         }
     }
     

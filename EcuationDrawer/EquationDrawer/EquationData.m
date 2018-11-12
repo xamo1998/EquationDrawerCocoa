@@ -15,10 +15,12 @@
 -(id)initWithName:(NSString *)name
         withTerms:(NSMutableArray *)terms{
     self=[super init];
-    if(!self){}
-    self.name=name;
-    self.terms=terms;
-    termCount=[terms count];
+    if(self){
+        self.name=name;
+        self.terms=terms;
+        termCount=[terms count];
+    }
+    
     return self;
 }
 -(float)valueAt:(float)x withEcuation:(NSString *)ecuation withParams:(NSMutableArray *)params withValueParams:(NSMutableArray *)paramsValue{

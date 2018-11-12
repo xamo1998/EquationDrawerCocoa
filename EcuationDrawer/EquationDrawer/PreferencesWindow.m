@@ -21,20 +21,16 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
 
 - (void)windowDidLoad {
     [super windowDidLoad];
-    
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
 -(id)init{
     self=[super initWithWindowNibName:@"PreferencesWindow"];
-    if(!self){
-        
-    }
-    NSLog(@"LOG(2.7118)=%f :::::::: Log2(2.7118)=%f :::::::: Log10(2.7118)=%f",logf(2.7118), log2(2.7178), log10(2.7118));
-    notificationCenter=[NSNotificationCenter defaultCenter];
-    //NSLog(@"", [image stri]);
-    termValues=[[NSMutableArray alloc]init];
-    termsValuesInterpeterWindow=[[NSMutableArray alloc]init];
+    if(self){
+        notificationCenter=[NSNotificationCenter defaultCenter];
+        termValues=[[NSMutableArray alloc]init];
+        termsValuesInterpeterWindow=[[NSMutableArray alloc]init];    
+    }  
     return self;
 }
 
@@ -67,17 +63,14 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
 }
 
 - (void)addGraphicInterpeterWindow:(id)sender{
-    NSLog(@"ADDED11111");
     NSMutableArray *paramsArray=[[NSMutableArray alloc]init];
     NSInteger numberOfParams=[counterInterpeterWindow integerValue];
     for(char a='a'; a<'w'; a++){
         if(a!='f' && a!='g' && a!='h' && numberOfParams!=0){
             numberOfParams--;
-            NSLog(@"HAY %d",numberOfParams);
             [paramsArray addObject:[NSString stringWithFormat:@"%c",a]];
         }
     }
-    NSLog(@"MY EQUATION: %@",[nameTextFieldInterpeterWindow stringValue]);
     Equation *equation=[[Equation alloc]initWithEquationToSolve:[equationTextField stringValue] withParams:paramsArray withParamValues:termsValuesInterpeterWindow];
     EquationParser *parser=[[EquationParser alloc]initWithEquationToSolve:[equationTextField stringValue] withTermValues:termsValuesInterpeterWindow withTerm:paramsArray];
     NSString *displayName=[[NSString alloc]init];
@@ -96,13 +89,10 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     [[modelo equations]addObject:equation];
     [colorWellInterpeterWindow setColor:[self getRandomColor]];
     [equationsInterpeterWindow reloadData];
-    NSLog(@"ADDED");
 }
 
 -(void)addGraphic:(id)sender{
     NSInteger indexComboBox=[equationComboBox indexOfSelectedItem];
-    
-    //Poner color!
     EquationData *data=[[modelo equationData]objectAtIndex:indexComboBox];
     Equation *ecuation= [[Equation alloc]initWithEquationToSolve:[data name] withParams:[data terms] withParamValues:termValues];
     [ecuation setColor:[colorWell color]];
@@ -111,9 +101,7 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     NSRect rect=[modelo funcRect];
     float width=0.6*(rect.size.width+rect.size.height)/400;
     if(width<0.05) width=0.05;
-    [ecuation setLineWidth:width];    //ecuation.name=[nameTextField stringValue];
-    //ecuation.color=[colorWell color];
-    //ecuation.ecuation=[[[modelo ecuationData]objectAtIndex:indexComboBox]getCustomizedName:termValues];
+    [ecuation setLineWidth:width];
     [[modelo equations]addObject:ecuation];
     [colorWell setColor:[self getRandomColor]];
     [equationTableView reloadData];
@@ -132,7 +120,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     [drawedEquationsInterpeterWindow reloadData];
     [drawedEquations reloadData];
     if([[modelo drawedEquations]count]==0){
-        //NSLog(@"Hay %d elementos...",[[modelo drawedEquations]count]);
         [drawGraphicButton setEnabled:false];
         [drawGraphicButtonInterpeterWindow setEnabled:false];
     }
@@ -153,7 +140,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     [drawGraphicButton setEnabled:true];
     [drawGraphicButtonInterpeterWindow setEnabled:true];
 }
-
 
 
 //TextField listeners
@@ -192,7 +178,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
 }
 -(void)customParamsEditTextListener:(id)sender{
     if([counterInterpeterWindow integerValue]>=0 && [counterInterpeterWindow integerValue]<15){
-        //NSLog(@"VALOR: %d",[counterInterpeterWindow integerValue]);
         [termsValuesInterpeterWindow removeAllObjects];
         for(int i=0; i<[counterInterpeterWindow integerValue]; i++){
             [termsValuesInterpeterWindow addObject:@""];
@@ -207,9 +192,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
         NSRect textFieldFrame = [counterInterpeterWindow frame];
         CGFloat centerX=textFieldFrame.origin.x;
         CGFloat centerY=textFieldFrame.origin.y;
-        //NSPoint origin = NSMakePoint(centerX, centerY);
-        //NSPoint one = NSMakePoint(centerX-5, centerY);
-        //NSPoint two = NSMakePoint(centerX+5, centerY);
         if([counterInterpeterWindow frame].origin.x==centerX)
             [self animateTextField:counterInterpeterWindow];
         
@@ -217,7 +199,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     
 }
 -(void)controlTextDidChange:(NSNotification *)obj{
-    //NSLog(@"FDF");
     if([obj object]==equationTextField){
         NSInteger length=[[equationTextField stringValue]length];
         NSRange range;
@@ -248,8 +229,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
         }
         if([counterInterpeterWindow integerValue]==0)
             [equationTextField setEnabled:true];
-        //else
-         //   [equationTextField setEnabled:false];
     }else
         [self checkCorrectGraphic];
 }
@@ -269,7 +248,7 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
         }
         [equation setLineWidth:[sender floatValue]];
         if(isDrawed)
-            [notificationCenter postNotificationName:DrawGraphicNotification object:self]; //Improve solo si está dibujada
+            [notificationCenter postNotificationName:DrawGraphicNotification object:self];
     }
     
     
@@ -288,9 +267,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     }
     [notificationCenter postNotificationName:DrawGraphicNotification object:self];
 }
-
-
-
 
 //Others
 -(void)exportImage:(id)sender{
@@ -325,7 +301,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
         if(result==NSFileHandlingPanelOKButton){
             NSFileManager *manager = [NSFileManager defaultManager];
             NSURL *saveURL=[savePanel URL];
-            //NSData *data =[rep representationUsingType:NSPNGFileType properties:nil];
             [data writeToURL:saveURL atomically:true];
         }
     }];
@@ -341,10 +316,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
 }
 -(void)updateXandYValues{
     NSRect rect=[modelo funcRect];
-    //if([xStart floatValue]>=[xEnd floatValue])
-      //  [self animateTextField:xEnd];
-    
-        
     [xStart setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.x]];
     [yStart setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.y]];
     [xEnd setStringValue:[NSString stringWithFormat:@"%.2f",rect.origin.x+rect.size.width]];
@@ -382,14 +353,12 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     }
 }
 -(void)animateTextField:(NSTextField *)textField{
-    
     NSRect textFieldFrame = [textField frame];
     CGFloat centerX=textFieldFrame.origin.x;
     CGFloat centerY=textFieldFrame.origin.y;
     NSPoint origin = NSMakePoint(centerX, centerY);
     NSPoint one = NSMakePoint(centerX-5, centerY);
     NSPoint two = NSMakePoint(centerX+5, centerY);
-    //if([NSAnimationContext currentContext]isCom)
     [NSAnimationContext beginGrouping];
     [[NSAnimationContext currentContext] setCompletionHandler:^{
         
@@ -436,14 +405,10 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
 }
 
 -(void)visualPropertyListener:(id)sender{
-    
-    //NSLog(@"%@",[sender object]);
-    
     if(sender==[grid controlView])
         [modelo setGrid:![modelo grid]];
     if(sender==[tickNumbers controlView])
         [modelo setTickMarks:![modelo tickMarks]];
-    //NSLog(@"GRID:%",[grid isEnabled]);
     [notificationCenter postNotificationName:DrawGraphicNotification object:self];
 }
 
@@ -457,12 +422,9 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
             return[[[modelo equationData]objectAtIndex:index]termCount];
         }
     }
-    NSLog(@"ADDED11");
     if(tableView==paramsInterpeterWindow)
         return [counterInterpeterWindow integerValue];
-    NSLog(@"ADDED22");
     if(tableView==equationTableView || tableView==equationsInterpeterWindow)return[[modelo equations]count];
-    NSLog(@"ADDED33");
     if(tableView==drawedEquations || tableView==drawedEquationsInterpeterWindow)return[[modelo drawedEquations]count];
     if(tableView==allEquationsTableView) return[[modelo equations]count]+[[modelo drawedEquations]count];
     return 0;
@@ -477,14 +439,12 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
             [moveToRight setEnabled:false];
             [moveToLeftInterpeterWindow setEnabled:false];
             [moveToRightInterpeterWindow setEnabled:false];
-            //[drawGraphicButton setEnabled:NO];
             return;
         }
         [moveToRight setEnabled:true];
         [moveToRightInterpeterWindow setEnabled:true];
         [removeGraphicButton setEnabled:YES];
         [removeGraphicButtonInterpeterWindow setEnabled:true];
-        //[drawGraphicButton setEnabled:YES];
         
     }else if([notification object]==drawedEquations){
         if([drawedEquations selectedRow]<0){
@@ -494,14 +454,12 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
             [moveToRight setEnabled:false];
             [moveToLeftInterpeterWindow setEnabled:false];
             [moveToRightInterpeterWindow setEnabled:false];
-            //[drawGraphicButton setEnabled:NO];
             return;
         }
         [moveToLeft setEnabled:true];
         [moveToLeftInterpeterWindow setEnabled:true];
         [removeGraphicButton setEnabled:YES];
         [removeGraphicButtonInterpeterWindow setEnabled:true];
-        //[drawGraphicButton setEnabled:YES];
     }else if([notification object]==equationsInterpeterWindow){
         if([equationsInterpeterWindow selectedRow]<0){
             [removeGraphicButton setEnabled:NO];
@@ -510,14 +468,12 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
             [moveToRight setEnabled:false];
             [moveToLeftInterpeterWindow setEnabled:false];
             [moveToRightInterpeterWindow setEnabled:false];
-            //[drawGraphicButton setEnabled:NO];
             return;
         }
         [moveToRight setEnabled:true];
         [moveToRightInterpeterWindow setEnabled:true];
         [removeGraphicButton setEnabled:YES];
         [removeGraphicButtonInterpeterWindow setEnabled:true];
-        //[drawGraphicButton setEnabled:YES];
         
     }else if([notification object]==drawedEquationsInterpeterWindow){
         if([drawedEquationsInterpeterWindow selectedRow]<0){
@@ -527,24 +483,19 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
             [moveToRight setEnabled:false];
             [moveToLeftInterpeterWindow setEnabled:false];
             [moveToRightInterpeterWindow setEnabled:false];
-            //[drawGraphicButton setEnabled:NO];
             return;
         }
         [moveToLeft setEnabled:true];
         [moveToLeftInterpeterWindow setEnabled:true];
         [removeGraphicButton setEnabled:YES];
         [removeGraphicButtonInterpeterWindow setEnabled:true];
-        //[drawGraphicButton setEnabled:YES];
     }else if([notification object]==allEquationsTableView){
         if([allEquationsTableView selectedRow]>=0){
             [functionColorWell setEnabled:true];
             [nameTextFieldPreferences setEnabled:true];
             [widthSlider setEnabled:true];
-            
             Equation *equation;
-            NSLog(@"SELECTED: %d, COUNT:%d",[allEquationsTableView selectedRow],([[modelo equations]count]-1));
             if((int)[allEquationsTableView selectedRow]>((int)[[modelo equations]count]-1)){
-                NSLog(@"aaaaa");
                 equation=[[modelo drawedEquations]objectAtIndex: [allEquationsTableView selectedRow]-[[modelo equations]count]];
             }else{
                 equation=[[modelo equations]objectAtIndex:[allEquationsTableView selectedRow]];
@@ -593,7 +544,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
 }
 
 - (void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
-    //Comprovación de tabla
     if(tableView==paramsTableView){
         [termValues removeObjectAtIndex:row];
         [termValues insertObject:[NSString stringWithFormat:@"%.2f",[object floatValue]] atIndex:row];
@@ -613,24 +563,20 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
             
     }
 }
--(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
-    //NSLog(@"HOLAAA66666");
-    
+-(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{    
     if(tableView==paramsTableView){
-        if([[paramsTableView tableColumns]indexOfObject:tableColumn]==1) //Si es la columna de los parametros
-            if([termValues count]<=row) //Puede estar vacio...
+        if([[paramsTableView tableColumns]indexOfObject:tableColumn]==1)
+            if([termValues count]<=row)
                 return @"";
-            else{//Devolvemos el valor del parametro que toque
-                return [termValues objectAtIndex:row]; //Devolvemos el value de key=termName.
-            }
-        //Param Name values
-        
+            else{
+                return [termValues objectAtIndex:row]; 
+            }        
         NSInteger index = [equationComboBox indexOfSelectedItem];
         EquationData *data=[[modelo equationData]objectAtIndex:index];
         return [[data terms]objectAtIndex:row];
     }else if(tableView==equationTableView || tableView==equationsInterpeterWindow){
         Equation *ecuation=[[modelo equations]objectAtIndex:row];
-        if([[tableView tableColumns]indexOfObject:tableColumn]==0)//Name
+        if([[tableView tableColumns]indexOfObject:tableColumn]==0)
             return [ecuation name];
         else if([[tableView tableColumns]indexOfObject:tableColumn]==1)
             return [ecuation displayName];
@@ -642,14 +588,13 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
         return NULL;
     }else if(tableView==drawedEquations || tableView==drawedEquationsInterpeterWindow){
         Equation *ecuation=[[modelo drawedEquations]objectAtIndex:row];
-        if([[tableView tableColumns]indexOfObject:tableColumn]==0)//Name
+        if([[tableView tableColumns]indexOfObject:tableColumn]==0)
             return [ecuation name];
         else if([[tableView tableColumns]indexOfObject:tableColumn]==1)
             return [ecuation displayName];
         else if([[tableView tableColumns]indexOfObject:tableColumn]==2)
             return NULL;
     }else if(tableView==paramsInterpeterWindow){
-        //NSLog(@"HOLAAA");
         NSInteger numberOfParams=[counterInterpeterWindow integerValue];
         NSMutableArray *paramsArray=[[NSMutableArray alloc]init];
         for(char a='a'; a<'w'; a++){
@@ -657,7 +602,7 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
                 [paramsArray addObject:[NSString stringWithFormat:@"%c",a]];
             }
         }
-        if([[tableView tableColumns]indexOfObject:tableColumn]==0)//Param name
+        if([[tableView tableColumns]indexOfObject:tableColumn]==0)
             return [paramsArray objectAtIndex:row];
         else if([[tableView tableColumns]indexOfObject:tableColumn]==1)
             return [termsValuesInterpeterWindow objectAtIndex:row];
@@ -671,7 +616,7 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
             equation=[[modelo equations]objectAtIndex:row];
         }
         
-        if([[tableView tableColumns]indexOfObject:tableColumn]==0)//Name
+        if([[tableView tableColumns]indexOfObject:tableColumn]==0)
             return [equation name];
         else if([[tableView tableColumns]indexOfObject:tableColumn]==1)
             return [equation displayName];
@@ -683,8 +628,6 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     return NULL;
     
 }
-
-
 
 //Color Well Listeners
 -(void)changeColorListener:(id)sender{

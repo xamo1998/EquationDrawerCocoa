@@ -13,31 +13,24 @@
 
 -(id)initWithEquationSplitted:(NSMutableArray *)equationSplitted{
     self=[super init];
-    if(!self){
-        
+    if(self){
+        self.finalEquationSplitted=equationSplitted;
+        self.equationSplitted=[[NSMutableArray alloc]init];
+        [self initOperations];
     }
-    self.finalEquationSplitted=equationSplitted;
-    self.equationSplitted=[[NSMutableArray alloc]init];
-    [self initOperations];
-    //float yValue=[self getYWithXValue:2.0f];
-    //NSLog(@"For the x Value: 2, The y value is %f",yValue);
     return self;
 }
 -(float)getYWithXValue:(float)xValue{
-    //First we go to the deepest parentheses
     [_equationSplitted removeAllObjects];
     for(int i=0; i<[_finalEquationSplitted count]; i++){
         [_equationSplitted addObject:[_finalEquationSplitted objectAtIndex:i]];
     }
     float value=0;
-    
     NSPoint position=[self getIndexOfDeepestParetheses]; //x=Start, y=end
-    //NSLog(@"POSITION: %@",position);
     while(position.x!=ERROR){
         if(position.x==position.y-1){ //Esta vacio: ()
             return ERROR;
         }
-        
         value=[self getValueFromIndexWithPosition:position withXValue:xValue];
         if(value==ERROR){
             return ERROR;
@@ -47,17 +40,13 @@
         }
         [_equationSplitted insertObject:[NSString stringWithFormat:@"%f",value] atIndex:position.x];
         position=[self getIndexOfDeepestParetheses];
-        //NSLog(@"PASO PARE___%@",_equationSplitted);
     }
-    //NSLog(@"11111111");
-    //Cos sen tan....
+
     int indexOfOperation=[self getIndexOfOperation];
     while(indexOfOperation!=ERROR){
         if([_equationSplitted count]-1<indexOfOperation+1){ //If user is typing x*......
             return ERROR;
-        }
-        
-        
+        } 
         NSString * operationFound=[_equationSplitted objectAtIndex:indexOfOperation];
         if([operationFound isEqualTo:@"cos"])
             value=cos([[_equationSplitted objectAtIndex:indexOfOperation+1]floatValue]);
@@ -99,16 +88,12 @@
             if(temp<=0) value=NaN;
             else value=logf([[_equationSplitted objectAtIndex:indexOfOperation+1]floatValue]);
         }
-       
-        
         [_equationSplitted removeObjectAtIndex:indexOfOperation];
         [_equationSplitted removeObjectAtIndex:indexOfOperation];
         [_equationSplitted insertObject:[NSString stringWithFormat:@"%f",value] atIndex:indexOfOperation];
         indexOfOperation=[self getIndexOfOperation];
-        //NSLog(@"PASO COS___%@",_equationSplitted);
     }
-    //NSLog(@"222222222");
-    //^
+
     int indexOfRaised=[self getIndexOfRaisedSymbol:_equationSplitted];
     while(indexOfRaised!=ERROR){
         if([_equationSplitted count]-1<indexOfRaised+1){ //If user is typing x*......
@@ -120,16 +105,13 @@
         value1=[_equationSplitted objectAtIndex:indexOfRaised-1];
         value2=[_equationSplitted objectAtIndex:indexOfRaised+1];
         value=[self operate2TermsWithOperation:@"^" withValue1:value1 withValue2:value2 withXValue:xValue];
-        //NSLog(@"The result of %@^%@ is: %f",value1,value2,value);
         [_equationSplitted removeObjectAtIndex:indexOfRaised-1];
         [_equationSplitted removeObjectAtIndex:indexOfRaised-1];
         [_equationSplitted removeObjectAtIndex:indexOfRaised-1];
         [_equationSplitted insertObject:[NSString stringWithFormat:@"%f",value] atIndex:indexOfRaised-1];
         indexOfRaised=[self getIndexOfRaisedSymbol:_equationSplitted];
-        //NSLog(@"PASO ^___%@",_equationSplitted);
     }
-    //NSLog(@"3333333");
-    // * /
+
     int indexOfMultiplier=[self getIndexOfMultiplier:_equationSplitted];
     while(indexOfMultiplier!=ERROR){
         if([_equationSplitted count]-1<indexOfMultiplier+1){ //If user is typing x*......
@@ -149,12 +131,9 @@
         [_equationSplitted removeObjectAtIndex:indexOfMultiplier-1];
         [_equationSplitted insertObject:[NSString stringWithFormat:@"%f",value] atIndex:indexOfMultiplier-1];
         indexOfMultiplier=[self getIndexOfMultiplier:_equationSplitted];
-        //NSLog(@"PASO */___%@",_equationSplitted);
     }
-    //NSLog(@"44444444");
-    // + -
+
     int indexOfAddition=[self getIndexOfAddition:_equationSplitted];
-    //NSLog(@"INDEX OF ADDITION: %d",indexOfAddition);
     while(indexOfAddition!=ERROR){
         if([_equationSplitted count]-1<indexOfAddition+1){ //If user is typing x+......
             return ERROR;
@@ -174,9 +153,7 @@
         [_equationSplitted removeObjectAtIndex:indexOfAddition-1];
         [_equationSplitted insertObject:[NSString stringWithFormat:@"%f",value] atIndex:indexOfAddition-1];
         indexOfAddition=[self getIndexOfAddition:_equationSplitted];
-        //NSLog(@"PASO +-___%@",_equationSplitted);
     }
-    //NSLog(@"555555555");
     if([[_equationSplitted objectAtIndex:0]isEqualTo:@"x"]) return xValue;
     return [[_equationSplitted objectAtIndex:0]floatValue];
 }
@@ -414,8 +391,6 @@
 }
 -(bool)isNumber:(NSString *)number{
     if([number isEqualTo:@"."]) return YES;
-    //double number=[number doubleValue];
-    //NSLog(number);
     if([number isEqualTo:@"e"])return NO;
     if([number isEqualTo:@"("]) return NO;
     if([number isEqualTo:@"0.000000"])return true;
