@@ -10,7 +10,10 @@
 #import <QuartzCore/QuartzCore.h>
 #define ERROR -99999999
 @interface PreferencesWindow ()
-
+-(NSColor *)getRandomColor;
+-(void)animateTextField:(NSTextField *)textField;
+-(bool)checkCorrectEquation;
+-(void) checkCorrectGraphic;
 @end
 
 @implementation PreferencesWindow
@@ -680,6 +683,7 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
     
     
 }
+
 
 -(void) checkCorrectGraphic{
     NSInteger indexComboBox=[equationComboBox indexOfSelectedItem];
