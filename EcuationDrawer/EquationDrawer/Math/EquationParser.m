@@ -99,11 +99,15 @@
     [operations addObject:[[Operation alloc]initWithOperation:@"cosh"]];
     [operations addObject:[[Operation alloc]initWithOperation:@"tanh"]];
     [operations addObject:[[Operation alloc]initWithOperation:@"tagh"]];
+    [operations addObject:[[Operation alloc]initWithOperation:@"tgh"]];
+    
     [operations addObject:[[Operation alloc]initWithOperation:@"cos"]];
     [operations addObject:[[Operation alloc]initWithOperation:@"sen"]];
     [operations addObject:[[Operation alloc]initWithOperation:@"sin"]];
     [operations addObject:[[Operation alloc]initWithOperation:@"tag"]];
     [operations addObject:[[Operation alloc]initWithOperation:@"tan"]];
+    [operations addObject:[[Operation alloc]initWithOperation:@"tg"]];
+    
     [operations addObject:[[Operation alloc]initWithOperation:@"sqrt"]];
     [operations addObject:[[Operation alloc]initWithOperation:@"abs"]];
     [operations addObject:[[Operation alloc]initWithOperation:@"log"]];

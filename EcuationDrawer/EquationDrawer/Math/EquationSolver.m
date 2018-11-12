@@ -69,9 +69,13 @@
             value=sin([[_equationSplitted objectAtIndex:indexOfOperation+1]floatValue]);
         else if([operationFound isEqualTo:@"tag"])
             value=tan([[_equationSplitted objectAtIndex:indexOfOperation+1]floatValue]);
+        else if([operationFound isEqualTo:@"tag"])
+            value=tan([[_equationSplitted objectAtIndex:indexOfOperation+1]floatValue]);
         else if([operationFound isEqualTo:@"tanh"])
             value=tanh([[_equationSplitted objectAtIndex:indexOfOperation+1]floatValue]);
         else if([operationFound isEqualTo:@"tagh"])
+            value=tanh([[_equationSplitted objectAtIndex:indexOfOperation+1]floatValue]);
+        else if([operationFound isEqualTo:@"tgh"])
             value=tanh([[_equationSplitted objectAtIndex:indexOfOperation+1]floatValue]);
         else if([operationFound isEqualTo:@"cosh"])
             value=cosh([[_equationSplitted objectAtIndex:indexOfOperation+1]floatValue]);
@@ -295,12 +299,49 @@
             if([[parenthesesList objectAtIndex:i]isEqualTo:[[_operations objectAtIndex:j]operation]]){
                 NSString *operation=[[_operations objectAtIndex:j]operation];
                 if([parenthesesList count]-1<i+1)return ERROR;
+                
                 if([operation isEqualTo:@"cos"])
                     trigoValue= (float)cos([[parenthesesList objectAtIndex:i+1]floatValue]);
                 else if([operation isEqualTo:@"sen"])
                     trigoValue= (float)sin([[parenthesesList objectAtIndex:i+1]floatValue]);
                 else if([operation isEqualTo:@"tan"])
                     trigoValue= (float)tan([[parenthesesList objectAtIndex:i+1]floatValue]);
+                else if([operation isEqualTo:@"sin"])
+                    trigoValue= (float)sin([[parenthesesList objectAtIndex:i+1]floatValue]);
+                else if([operation isEqualTo:@"tag"])
+                    trigoValue= (float)tan([[parenthesesList objectAtIndex:i+1]floatValue]);
+                else if([operation isEqualTo:@"tg"])
+                    trigoValue= (float)tan([[parenthesesList objectAtIndex:i+1]floatValue]);
+                else if([operation isEqualTo:@"tanh"])
+                    trigoValue= (float)tanh([[parenthesesList objectAtIndex:i+1]floatValue]);
+                else if([operation isEqualTo:@"tagh"])
+                    trigoValue= (float)tanh([[parenthesesList objectAtIndex:i+1]floatValue]);
+                else if([operation isEqualTo:@"tgh"])
+                    trigoValue= (float)tanh([[parenthesesList objectAtIndex:i+1]floatValue]);
+                else if([operation isEqualTo:@"cosh"])
+                    trigoValue= (float)cosh([[parenthesesList objectAtIndex:i+1]floatValue]);
+                else if([operation isEqualTo:@"senh"])
+                    trigoValue= (float)sinh([[parenthesesList objectAtIndex:i+1]floatValue]);
+                else if([operation isEqualTo:@"sinh"])
+                    trigoValue= (float)sinh([[parenthesesList objectAtIndex:i+1]floatValue]);
+                else if([operation isEqualTo:@"sqrt"]){
+                    float temp=(float)tan([[parenthesesList objectAtIndex:i+1]floatValue]);
+                    if(temp<0) trigoValue=NaN;
+                    else trigoValue=sqrt((float)tan([[parenthesesList objectAtIndex:i+1]floatValue]));
+                }else if([operation isEqualTo:@"abs"]){
+                    trigoValue= (float)[[parenthesesList objectAtIndex:i+1]floatValue];
+                    if(trigoValue<0)trigoValue*=-1;
+                }else if([operation isEqualTo:@"log"]){
+                    float temp=[[parenthesesList objectAtIndex:i+1]floatValue];
+                    if(temp<=0) trigoValue=NaN;
+                    trigoValue= (float)logf([[parenthesesList objectAtIndex:i+1]floatValue]);
+                }else if([operation isEqualTo:@"ln"]){
+                    float temp=[[parenthesesList objectAtIndex:i+1]floatValue];
+                    if(temp<=0) trigoValue=NaN;
+                    trigoValue= (float)logf([[parenthesesList objectAtIndex:i+1]floatValue]);
+                }
+                
+                
                 [parenthesesList removeObjectAtIndex:i];
                 [parenthesesList removeObjectAtIndex:i];
                 [parenthesesList insertObject:[NSString stringWithFormat:@"%f",trigoValue] atIndex:i];
@@ -387,20 +428,25 @@
 }
 -(void)initOperations{
     _operations=[[NSMutableArray alloc]init];
-    [_operations addObject:[[Operation alloc]initWithOperation:@"cos"]];
-    [_operations addObject:[[Operation alloc]initWithOperation:@"sen"]];
-    [_operations addObject:[[Operation alloc]initWithOperation:@"sin"]];
     [_operations addObject:[[Operation alloc]initWithOperation:@"senh"]];
     [_operations addObject:[[Operation alloc]initWithOperation:@"sinh"]];
     [_operations addObject:[[Operation alloc]initWithOperation:@"cosh"]];
     [_operations addObject:[[Operation alloc]initWithOperation:@"tanh"]];
-    [_operations addObject:[[Operation alloc]initWithOperation:@"tag"]];
     [_operations addObject:[[Operation alloc]initWithOperation:@"tagh"]];
+    [_operations addObject:[[Operation alloc]initWithOperation:@"tgh"]];
+    
+    [_operations addObject:[[Operation alloc]initWithOperation:@"cos"]];
+    [_operations addObject:[[Operation alloc]initWithOperation:@"sen"]];
+    [_operations addObject:[[Operation alloc]initWithOperation:@"sin"]];
+    [_operations addObject:[[Operation alloc]initWithOperation:@"tag"]];
     [_operations addObject:[[Operation alloc]initWithOperation:@"tan"]];
+    [_operations addObject:[[Operation alloc]initWithOperation:@"tg"]];
+    
     [_operations addObject:[[Operation alloc]initWithOperation:@"sqrt"]];
     [_operations addObject:[[Operation alloc]initWithOperation:@"abs"]];
     [_operations addObject:[[Operation alloc]initWithOperation:@"log"]];
     [_operations addObject:[[Operation alloc]initWithOperation:@"ln"]];
+    
 }
 
 @end

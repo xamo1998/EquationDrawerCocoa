@@ -554,7 +554,9 @@ NSString * ReloadImageViewNotification = @"ReloadImageViewNotification";
             [nameTextFieldPreferences setStringValue:[equation name]];
         }else{
             [functionColorWell setEnabled:false];
+            [functionColorWell setColor:[NSColor disabledControlTextColor]];
             [nameTextFieldPreferences setEnabled:false];
+            [nameTextFieldPreferences setStringValue:@""];
             [widthSlider setEnabled:false];
         }
     }
