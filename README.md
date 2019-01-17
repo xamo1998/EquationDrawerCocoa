@@ -43,11 +43,16 @@ La selección de cualquiera de las ecuaciones anteriores, así como sus parámet
 Este menú consta de 3 pestañas:
 
 - Gráficas predefinidas:
+
 ![Sample image](/readmeAssets/predefined_functions.png?raw=true "predefined_functions")
+
 - Intérprete de ecuaciones:
+
 ![Sample image](/readmeAssets/equationInterpeter.png?raw=true "equationInterpeter")
- - Preferencias visuales:
-  ![Sample image](/readmeAssets/personalizeTab.png?raw=true "personalizeTab")
+
+- Preferencias visuales:
+
+![Sample image](/readmeAssets/personalizeTab.png?raw=true "personalizeTab")
 
 
 ### Gráficas predefinidas
